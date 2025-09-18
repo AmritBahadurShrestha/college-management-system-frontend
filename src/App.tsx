@@ -14,10 +14,6 @@ function App() {
   return (
     <main className='h-full tracking-wider'>
 
-      {/* <h1 className='text-center text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-600 to-blue-400 bg-clip-text text-transparent drop-shadow-md tracking-wide animate-pulse'>
-        College Management System
-      </h1> */}
-
       <Router>
         <Routes>
 
