@@ -35,7 +35,7 @@ const LoginForm = () => {
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error?.message ?? 'Failed Login');
+      toast.error(error?.message ?? 'Login Failed');
     },
     mutationKey: ['login_mutation']
   });
