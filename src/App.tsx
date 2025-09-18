@@ -6,7 +6,7 @@ import Signup from './pages/auth/signup'
 import DashboardLayout from './layouts/dashboard.layout'
 import AdminDashboard from './pages/dashboard/admin-dashboard'
 import ProfilePage from './pages/profilepage'
-import PageNotFound from './pages/page-not-found'
+import PageNotFound from './pages/page-not.found'
 import AttendancePage from './pages/attendancepage'
 
 function App() {

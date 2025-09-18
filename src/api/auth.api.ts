@@ -1,5 +1,5 @@
-import api from './'
-import type { ILoginData, ISignupData } from '../types/auth.types'
+import api from './';
+import type { ILoginData, ISignupData } from '../types/auth.types';
 
 export const login = async(data: ILoginData) => {
     try {

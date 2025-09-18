@@ -13,9 +13,7 @@ export const sidebarLinks: SidebarLink[] = [
   {
     label: 'Dashboard',
     subLinks: [
-      { label: 'Admin Dashboard', to: '/dashboard/admin' },
-      { label: 'Student Dashboard', to: '/dashboard/student' },
-      { label: 'Teacher Dashboard', to: '/dashboard/teacher' },
+      { label: 'Admin Dashboard', to: '/dashboard/admin' }
     ],
   },
   {
@@ -33,8 +31,7 @@ export const sidebarLinks: SidebarLink[] = [
     ],
   },
   { label: 'Courses', to: '/courses' },
+  { label: 'Classes', to: '/classes' },
   { label: 'Attendance', to: '/attendance' },
-  { label: 'Exams & Results', to: '/exams' },
   { label: 'Profile', to: '/profile' },
-  { label: 'Settings', to: '/settings' },
 ];

@@ -9,14 +9,12 @@ interface IProps {
 const CountCard: React.FC<IProps> = ({ count, label, bg }) => {
   return (
     <div
-      className={`rounded-md shadow-lg border p-6 flex flex-col gap-6 
-                  hover:shadow-xl transition-all duration-300 
-                  ${bg ? bg : 'bg-gradient-to-r from-indigo-50 to-indigo-100'}`}
+      className={`rounded-2xl shadow-lg border p-6 flex flex-col gap-4 items-center justify-center 
+                    text-white transform transition-all duration-300 
+                    ${bg ? bg : 'bg-gradient-to-r from-indigo-400 to-indigo-600'}`}
     >
-      <h1 className='text-2xl font-bold text-indigo-700'>{label}</h1>
-      <span className='w-full text-end text-3xl font-semibold text-indigo-900'>
-        {count}
-      </span>
+      <h1 className='text-xl sm:text-2xl font-bold'>{label}</h1>
+      <span className='text-2xl sm:text-3xl font-extrabold'>{count}</span>
     </div>
   )
 }

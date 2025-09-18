@@ -1,6 +1,6 @@
-import api from './'
+import api from './';
 
-export const fetchDashboard = async() => {
+export const dashboard = async() => {
     try {
         const response = await api.get('/dashboard')
         console.log(response.data)

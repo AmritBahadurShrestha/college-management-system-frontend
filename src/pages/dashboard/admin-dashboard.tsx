@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { fetchDashboard } from '../../api/dashboard.api'
-import CountCard from '../../components/dashboard/count-card'
+import { useQuery } from '@tanstack/react-query';
+import { dashboard } from '../../api/dashboard.api';
+import CountCard from '../../components/dashboard/count-card';
 
 interface DashboardData {
   students: number
@@ -11,28 +11,50 @@ interface DashboardData {
 
 const AdminDashboard = () => {
   const { data, isLoading } = useQuery<DashboardData>({
-    queryFn: fetchDashboard,
+    queryFn: dashboard,
     queryKey: ['dashboard'],
   })
 
   if (isLoading) {
-    return (
-      <div className='flex items-center justify-center h-full'>
-        <p className='text-gray-500 text-lg animate-pulse'>Loading...</p>
-      </div>
-    )
-  }
+  return (
+    <div className='flex flex-col items-center justify-center h-screen'>
+      {/* Spinner */}
+      <div className='w-10 h-10 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin mb-3'></div>
+      
+      {/* Loading Text */}
+      <p className='text-lg sm:text-xl font-semibold text-gray-700 animate-pulse'>
+        Loading Dashboard...
+      </p>
+    </div>
+  )
+}
 
   return (
-    <main className='h-full w-full p-8 bg-gray-50'>
-      <h2 className='text-2xl font-bold mb-6'>Admin Dashboard</h2>
+    <main className='h-full w-full p-6 sm:p-8 lg:p-3'>
+      <h2 className='text-3xl sm:text-4xl font-bold mb-8 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient'>Admin Dashboard</h2>
 
       {/* Stats Cards */}
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
-        <CountCard label='Students' count={data?.students || 0} bg='bg-blue-100' />
-        <CountCard label='Teachers' count={data?.teachers || 0} bg='bg-green-100' />
-        <CountCard label='Courses' count={data?.courses || 0} bg='bg-yellow-100' />
-        <CountCard label='Classes' count={data?.classes || 0} bg='bg-purple-100' />
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+        <CountCard
+          label='Students'
+          count={data?.students || 0}
+          bg='bg-gradient-to-r from-blue-400 to-blue-600 text-white'
+        />
+        <CountCard
+          label='Teachers'
+          count={data?.teachers || 0}
+          bg='bg-gradient-to-r from-green-400 to-green-600 text-white'
+        />
+        <CountCard
+          label='Courses'
+          count={data?.courses || 0}
+          bg='bg-gradient-to-r from-purple-400 to-purple-600 text-white'
+        />
+        <CountCard
+          label='Classes'
+          count={data?.classes || 0}
+          bg='bg-gradient-to-r from-pink-400 to-pink-600 text-white'
+        />
       </div>
     </main>
   )

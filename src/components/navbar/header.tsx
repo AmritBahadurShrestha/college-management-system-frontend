@@ -30,7 +30,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
       {/* Center: Welcome Section */}
       <div className='flex-1 flex justify-center mx-4'>
-        <p className="capitalize text-lg text-blue-600 font-medium">
+        <p className="capitalize text-lg sm:text-xl font-medium bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient">
           Welcome Back, {(user?.role ?? 'ADMIN').toLocaleUpperCase()}
         </p>
       </div>
