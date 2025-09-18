@@ -9,8 +9,6 @@ import ProfilePage from './pages/profilepage'
 import PageNotFound from './pages/page-not-found'
 import AttendancePage from './pages/attendancepage'
 
-// import StudentDashboard from './pages/dashboardstudent'
-
 function App() {
 
   return (

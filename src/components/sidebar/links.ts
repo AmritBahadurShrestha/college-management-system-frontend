@@ -14,7 +14,7 @@ export const sidebarLinks: SidebarLink[] = [
     label: 'Dashboard',
     subLinks: [
       { label: 'Admin Dashboard', to: '/dashboard/admin' },
-      { label: 'Student Dashboard', to: 'dashboard/student' },
+      { label: 'Student Dashboard', to: '/dashboard/student' },
       { label: 'Teacher Dashboard', to: '/dashboard/teacher' },
     ],
   },
