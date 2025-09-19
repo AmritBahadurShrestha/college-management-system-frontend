@@ -30,7 +30,7 @@ export const sidebarLinks: SidebarLink[] = [
       { label: 'Teacher Details', to: '/teachers/details' },
     ],
   },
-  { label: 'Courses', to: '/courses' },
+  { label: 'Courses', to: '/course' },
   { label: 'Classes', to: '/classes' },
   { label: 'Attendance', to: '/attendance' },
   { label: 'Profile', to: '/profile' },

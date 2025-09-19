@@ -5,6 +5,11 @@ import Login from './pages/auth/login'
 import Signup from './pages/auth/signup'
 import DashboardLayout from './layouts/dashboard.layout'
 import AdminDashboard from './pages/dashboard/admin-dashboard'
+
+import CoursePage from './pages/course'
+import CreateCourse from './pages/course/add.course'
+import UpdateCourse from './pages/course/update.course'
+
 import ProfilePage from './pages/profilepage'
 import PageNotFound from './pages/page-not.found'
 import AttendancePage from './pages/attendancepage'
@@ -22,6 +27,12 @@ function App() {
 
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
+
+            {/* Course */}
+            <Route path='/course' element= { <CoursePage /> }/>
+            <Route path='/course/add' element= { <CreateCourse /> }/>
+            <Route path='/course/edit/:id' element= { <UpdateCourse /> }/>
+
             <Route path = '/profile' element = { <ProfilePage /> }/>
             <Route path = '/attendance' element = { <AttendancePage /> }/>
 

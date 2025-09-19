@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const TeacherSchema = yup.object({
+export const CourseSchema = yup.object({
     code: yup.string().required('Course code is required'),
     name: yup.string().required('Course name is required'),
     creditHours: yup.number().min(1, 'Credit hours must be at least 1').max(6, 'Credit hours cannot exceed 6').required('Credit hours are required'),
