@@ -31,7 +31,7 @@ const CourseForm: React.FC<IProps> = ({ data: course }) => {
         mode: 'all'
     })
 
-    //Mutation
+    // Add Mutation
     const { mutate, isPending } = useMutation({
         mutationFn: postCourse,
         onSuccess: (response) => {
@@ -43,11 +43,12 @@ const CourseForm: React.FC<IProps> = ({ data: course }) => {
         }
     })
 
+    // Update Mutation
     const { mutate: updateMutation, isPending: updating } = useMutation({
         mutationFn: updateCourse,
         onSuccess: (response) => {
             toast.success(response.message || 'Course Updated');
-            queryClient.invalidateQueries({ queryKey: ['getCourseById', course?._id] })
+            queryClient.invalidateQueries({ queryKey: ['get_course_by_id', course?._id] })
             navigate('/course')
         },
         onError: (error) => {

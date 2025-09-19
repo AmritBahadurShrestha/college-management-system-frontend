@@ -23,10 +23,11 @@ const CreateCourse = () => {
             Course Form
           </h2>
 
-            {/* Horizontal line */}
-            <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
+          {/* Horizontal line */}
+          <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
           <CourseForm/>
+
         </div>
       </div>
     </main>

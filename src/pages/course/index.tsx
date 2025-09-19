@@ -3,7 +3,7 @@ import PageHeader from '../../components/header/page-header';
 
 const CoursePage = () => {
   return (
-    <main className='min-h-screen w-full p-0 bg-gray-50'>
+    <main className='min-h-screen w-full p-0'>
       
       {/* Page Header */}
       <PageHeader
@@ -23,10 +23,11 @@ const CoursePage = () => {
             Course List
           </h2>
 
-            {/* Horizontal line */}
-            <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
+          {/* Horizontal line */}
+          <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
           <CourseList/>
+
         </div>
       </div>
     </main>
