@@ -11,7 +11,7 @@ const ClassPage = () => {
         title='Class List'
         sub_title='All Classes'
         button_text='Add Class'
-        link_to='/cclass/add'
+        link_to='/class/add'
       />
 
       {/* Main content */}

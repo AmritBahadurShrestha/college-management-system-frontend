@@ -52,7 +52,7 @@ const UpdateClass = () => {
         title='Update Class'
         sub_title='All Classes'
         button_text='View List'
-        link_to='/cclass'
+        link_to='/class'
       />
 
       {/* Main content */}

@@ -6,30 +6,62 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ClassSchema } from '../../schema/class.schema';
 import { postClass, updateClass } from '../../api/class.api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { IClassData, IClassResponse } from '../../types/class.types';
+import { getAllTeachers } from '../../api/teacher.api';
+import SelectInput from '../common/inputs/select.input';
+import { getAllCourses } from '../../api/course.api';
+import { getAllStudents } from '../../api/student.api';
 
 interface IProps {
     data?: IClassResponse
 }
 
-const ClassForm: React.FC<IProps> = ({ data: cclass }) => {
+const ClassForm: React.FC<IProps> = ({ data: classData }) => {
 
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
     const methods = useForm({
         defaultValues: {
-            name: cclass?.name || '',
-            program: cclass?.program || '',
-            semester: cclass?.semester || 1,
-            students: cclass?.students || [],
-            courses: cclass?.courses || [],
-            teacher: cclass?.teacher || ''
+            name: classData?.name || '',
+            program: classData?.program || '',
+            semester: classData?.semester || 1,
+            teacher: typeof classData?.teacher === 'string' 
+                ? classData.teacher 
+                : classData?.teacher?._id || '',
+            students: classData?.students
+                ? classData.students.map(student =>
+                    typeof student === 'string' ? student : student._id
+                  )
+                : [],
+            courses: classData?.courses
+                ? classData.courses.map(course =>
+                    typeof course === 'string' ? course : course._id
+                  )
+                : []
         },
         resolver: yupResolver(ClassSchema),
         mode: 'all'
     })
+
+    // Query for teacher
+    const { data: teacher, isLoading: teacherLoading } = useQuery({
+        queryFn: getAllTeachers, // your API function
+        queryKey: ['teacher']
+    })
+
+    // Query for students
+    const { data: students, isLoading: studentsLoading } = useQuery({
+        queryFn: getAllStudents, // your API function
+        queryKey: ['students'],
+    });
+
+    // Query for courses
+    const { data: courses, isLoading: coursesLoading } = useQuery({
+        queryFn: getAllCourses, // your API function
+        queryKey: ['courses'],
+    });
 
     // Add Mutation
     const { mutate, isPending } = useMutation({
@@ -48,8 +80,8 @@ const ClassForm: React.FC<IProps> = ({ data: cclass }) => {
         mutationFn: updateClass,
         onSuccess: (response) => {
             toast.success(response.message || 'Class Updated');
-            queryClient.invalidateQueries({ queryKey: ['get_class_by_id', cclass?._id] })
-            navigate('/cclass')
+            queryClient.invalidateQueries({ queryKey: ['get_class_by_id', classData?._id] })
+            navigate('/class')
         },
         onError: (error) => {
             toast.error(error.message || 'Something went wrong')
@@ -57,11 +89,29 @@ const ClassForm: React.FC<IProps> = ({ data: cclass }) => {
     })
 
     const onSubmit = (data: IClassData) => {
+
+        const { name, program, semester, students, courses, teacher } = data
+        const formData = new FormData()
+
         console.log('Class Form', data)
-        if (cclass) {
-            updateMutation({ ...data, _id: cclass?._id })
+
+        formData.append('name', name);
+        formData.append('program', program);
+        formData.append('semester', String(semester));
+        formData.append('teacher', String(teacher));
+
+        if (Array.isArray(students)) {
+            students.forEach((studentId) => formData.append('students', studentId));
+        }
+
+        if (Array.isArray(courses)) {
+            courses.forEach((courseId) => formData.append('courses', courseId));
+        }
+
+        if (classData) {
+            updateMutation({ formData, _id: classData?._id })
         } else {
-            mutate(data)
+            mutate(formData)
         }
     };
 
@@ -95,28 +145,43 @@ const ClassForm: React.FC<IProps> = ({ data: cclass }) => {
                         placeholder='Enter semester'
                         required
                     />
-                    {/* Optional fields */}
-                    <Input
-                        id="teacher"
-                        name="teacher"
-                        label="Class Teacher"
-                        placeholder="Enter teacher name"
+                    {/* Teacher */}
+                    <SelectInput
+                        id='teacher'
+                        name='teacher'
+                        label='Teacher'
+                        placeholder={teacherLoading ? 'Loading teacher...' : 'Select teacher'}
+                        options={(teacher?.data || []).map((b: any) => ({
+                            label: b.fullName,
+                            value: b._id,
+                        }))}
+                        required
                     />
-
-                    {/* Students (array of IDs/names) */}
-                    <Input
-                        id="students"
+                    {/* Courses */}
+                    <SelectInput
                         name="students"
+                        id="students"
                         label="Students"
-                        placeholder="Enter student IDs (comma separated)"
+                        placeholder={studentsLoading ? 'Loading students...' : 'Select students'}
+                        options={(students?.data || []).map((c: any) => ({
+                            label: c.fullName,
+                            value: c._id,
+                        }))}
+                        multiple
+                        required
                     />
-
-                    {/* Courses (array of IDs/names) */}
-                    <Input
-                        id="courses"
+                    {/* Courses */}
+                    <SelectInput
                         name="courses"
+                        id="courses"
                         label="Courses"
-                        placeholder="Enter course IDs (comma separated)"
+                        placeholder={coursesLoading ? 'Loading courses...' : 'Select courses'}
+                        options={(courses?.data || []).map((c: any) => ({
+                            label: c.name,
+                            value: c._id,
+                        }))}
+                        multiple
+                        required
                     />
 
                 </div>

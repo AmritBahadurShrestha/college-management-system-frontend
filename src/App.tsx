@@ -56,9 +56,9 @@ function App() {
             <Route path='/course/edit/:id' element= { <UpdateCourse /> }/>
 
             {/* Class */}
-            <Route path='/cclass' element= { <ClassPage /> }/>
-            <Route path='/cclass/add' element= { <CreateClass /> }/>
-            <Route path='/cclass/edit/:id' element= { <UpdateClass /> }/>
+            <Route path='/class' element= { <ClassPage /> }/>
+            <Route path='/class/add' element= { <CreateClass /> }/>
+            <Route path='/class/edit/:id' element= { <UpdateClass /> }/>
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
             <Route path = '/attendance' element = { <AttendancePage /> }/>
