@@ -1,19 +1,23 @@
+import type { AttendanceStatus } from './enum';
 import type { IResponse } from './global.types';
+import type { IClassResponse } from './class.types';
+import type { ICourseResponse } from './course.types';
+import type { IStudentResponse } from './student.types';
 
 export interface IAttendanceData {
-    student: string;   // ObjectId reference to student
-    class: string;     // ObjectId reference to class
-    course: string;    // ObjectId reference to course
+    student: string;
+    class: string;
+    course: string;
     date: Date | string;
-    status: string;    // or enum if you want to import AttendanceStatus
+    status: AttendanceStatus;
     remarks?: string;
 }
 
 export interface IAttendanceResponse extends IResponse {
-    student: string;   // ObjectId reference to student
-    class: string;     // ObjectId reference to class
-    course: string;    // ObjectId reference to course
+    student: IStudentResponse;
+    class: IClassResponse;
+    course: ICourseResponse;
     date: Date | string;
-    status: string;    // or enum if you want to import AttendanceStatus
+    status: AttendanceStatus;
     remarks?: string;
 }
