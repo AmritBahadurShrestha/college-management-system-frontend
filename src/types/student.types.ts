@@ -1,3 +1,5 @@
+import type { Gender } from './enum';
+import type { ICourseResponse } from './course.types';
 import type { IImage, IResponse } from './global.types';
 
 export interface IStudentData {
@@ -6,12 +8,12 @@ export interface IStudentData {
     phone: string;
     address: string;
     dob: Date | string;
-    gender: string; // or enum if you have Gender enum imported
+    gender: Gender;
     rollNumber: string;
     registrationNumber: string;
     program: string;
     semester: number;
-    courses?: string[]; // array of ObjectIds (course IDs)
+    courses?: string[];
     profile: File | FileList;
 }
 
@@ -21,11 +23,11 @@ export interface IStudentResponse extends IResponse {
     phone: string;
     address: string;
     dob: Date | string;
-    gender: string; // or enum if you have Gender enum imported
+    gender: Gender;
     rollNumber: string;
     registrationNumber: string;
     program: string;
     semester: number;
-    courses?: string[]; // array of ObjectIds (course IDs)
+    courses?: ICourseResponse[];
     profile: IImage;
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getCourseById } from '../../api/course.api';
-import CourseForm from '../../components/course/form';
+import { getClassById } from '../../api/class.api';
+import ClassForm from '../../components/cclass/form';
 import { useParams, useSearchParams } from 'react-router';
 import PageHeader from '../../components/header/page-header';
 
-const UpdateCourse = () => {
+const UpdateClass = () => {
 
   const [showLoader, setShowLoader] = useState(true);
 
@@ -14,8 +14,8 @@ const UpdateCourse = () => {
   console.log(id, search[0].get('name'))
 
   const { isLoading, data } = useQuery({
-      queryFn: () => { return getCourseById(id || '') },
-      queryKey: ['get_course_by_id', id]
+      queryFn: () => { return getClassById(id || '') },
+      queryKey: ['get_class_by_id', id]
   })
 
   // Ensure loader shows at least 1.5 seconds
@@ -48,11 +48,11 @@ const UpdateCourse = () => {
       
       {/* Page Header */}
       <PageHeader
-        key='update-course'
-        title='Update Course'
-        sub_title='All Courses'
+        key='update-class'
+        title='Update Class'
+        sub_title='All Classes'
         button_text='View List'
-        link_to='/course'
+        link_to='/cclass'
       />
 
       {/* Main content */}
@@ -61,13 +61,13 @@ const UpdateCourse = () => {
         {/* Intro */}
         <div className='bg-white shadow-sm rounded-sm p-4 sm:p-6 md:p-8'>
           <h2 className='text-xl sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text text-center mb-3 sm:mb-4'>
-            Update Course Form
+            Update Class Form
           </h2>
 
           {/* Horizontal line */}
           <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
-          <CourseForm data= {data?.data}/>
+          <ClassForm data= {data?.data}/>
 
         </div>
       </div>
@@ -75,4 +75,4 @@ const UpdateCourse = () => {
   );
 };
 
-export default UpdateCourse;
+export default UpdateClass;

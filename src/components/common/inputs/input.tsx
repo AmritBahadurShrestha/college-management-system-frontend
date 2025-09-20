@@ -6,7 +6,7 @@ type Props = {
   id: string,
   name: string,
   placeholder?: string,
-  type?: 'text' | 'number' | 'password',
+  type?: 'text' | 'number' | 'password' | 'email' | 'date',
   required?: boolean
 }
 
@@ -15,7 +15,7 @@ const Input = ({ id, label, name, placeholder='placeholder', type='text', requir
   const { register, watch, formState: { errors } } = useFormContext()
 
   return (
-    <div className='flex flex-col gap-1 w-full sm:w-3/4 md:w-full'>
+    <div className='flex flex-col gap-1'>
 
       {/* Label */}
       <div className='flex items-center gap-1'>

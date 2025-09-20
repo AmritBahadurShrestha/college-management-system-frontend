@@ -19,19 +19,17 @@ export const sidebarLinks: SidebarLink[] = [
   {
     label: 'Students',
     subLinks: [
-      { label: 'All Students', to: '/students/all' },
-      { label: 'Student Details', to: '/students/details' },
+      { label: 'Students', to: '/student' }
     ],
   },
   {
     label: 'Teachers',
     subLinks: [
-      { label: 'All Teachers', to: '/teachers/all' },
-      { label: 'Teacher Details', to: '/teachers/details' },
+      { label: 'Teachers', to: '/teacher' }
     ],
   },
   { label: 'Courses', to: '/course' },
-  { label: 'Classes', to: '/classes' },
+  { label: 'Classes', to: '/class' },
   { label: 'Attendance', to: '/attendance' },
   { label: 'Profile', to: '/profile' },
 ];

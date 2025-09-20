@@ -1,34 +1,34 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import Table from '../common/table/table';
-import ActionButtons from '../common/table/action-button';
+import Table from '../common/table/extra-table';
+import ActionButtons from '../common/table/extra-action-button';
 import { createColumnHelper } from '@tanstack/react-table';
 import ConfirmationModal from '../modal/confirmation.modal';
-import { deleteCourse, getAllCourses } from '../../api/course.api';
+import { deleteTeacher, getAllTeachers } from '../../api/teacher.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const CourseList = () => {
+const TeacherList = () => {
 
   const [show, setShow] = useState(false)
-  const [selectedCourse, setselectedCourse] = useState(null)
+  const [selectedTeacher, setselectedTeacher] = useState(null)
 
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-      queryFn: getAllCourses,
-      queryKey: ['get_all_courses']
+      queryFn: getAllTeachers,
+      queryKey: ['get_all_teachers']
   })
 
   // Delete Mutation
   const { mutate, isPending } = useMutation({
-      mutationFn: deleteCourse,
+      mutationFn: deleteTeacher,
       onSuccess: (response) => {
-          toast.success(response.message ?? 'Course Deleted')
-          queryClient.invalidateQueries({queryKey: ['get_all_courses']})
+          toast.success(response.message ?? 'Teacher Deleted')
+          queryClient.invalidateQueries({queryKey: ['get_all_teachers']})
           setShow(false)
       },
       onError: (error) => {
-          toast.error(error.message ?? 'Course could not be deleted')
+          toast.error(error.message ?? 'Teacher could not be deleted')
       }
   })
 
@@ -39,29 +39,43 @@ const CourseList = () => {
   const columnHelper = createColumnHelper<any>()
 
   const columns = [
-    columnHelper.accessor('code', {
-      header: () => <span>Code</span>,
+    columnHelper.accessor('profile', {
+        header: () => <span>Profile</span>,
+        cell: (info) => {
+            return (
+                <div className='flex items-center gap-4 justify-center'>
+                    <div className='h-12 w-12 flex-shrink-0'>
+                        <img src={ info.row.original.profile.path }
+                        className='h-full w-full object-contain rounded-md border border-gray-200 shadow-sm bg-white p-1'
+                    />
+                    </div>
+                </div>
+            )
+        }
+    }),
+    columnHelper.accessor('fullName', {
+      header: () => <span>Full Name</span>,
       cell: info => info.getValue(),
     }),
-    columnHelper.accessor('name', {
-      header: () => <span>Name</span>,
+    columnHelper.accessor('email', {
+      header: () => <span>Email</span>,
       cell: info => info.getValue(),
     }),
-    columnHelper.accessor('creditHours', {
-      header: () => <span>Credit Hours</span>,
+    columnHelper.accessor('phone', {
+      header: () => <span>Phone No.</span>,
+      cell: info => info.getValue(),
+    }),
+    columnHelper.accessor('gender', {
+      header: () => <span>Gender</span>,
       cell: info => info.getValue(),
     }),
     columnHelper.accessor('department', {
       header: () => <span>Department</span>,
       cell: info => info.getValue(),
     }),
-    columnHelper.accessor('semester', {
-      header: () => <span>Semester</span>,
-      cell: info => info.getValue(),
-    }),
-    columnHelper.accessor('program', {
-      header: () => <span>Program</span>,
-      cell: info => info.getValue(),
+    columnHelper.accessor('courses', {
+      header: () => <span>Courses</span>,
+      cell: (info) => <span>{ info.getValue()?.map((course: any) => course.name).join(', ') || '-' }</span>,
     }),
     columnHelper.accessor('createdAt', {
       header: () => <span>Created At</span>,
@@ -85,9 +99,9 @@ const CourseList = () => {
       cell: ({ row: {original} }) => {
         return (
           <ActionButtons
-            edit_link={`/course/edit/${original?._id}?name=${original.name}`}
+            edit_link={`/teacher/edit/${original?._id}?name=${original.fullName}`}
             onDelete={ () => {
-              setselectedCourse(original?._id)
+              setselectedTeacher(original?._id)
               setShow(true)
             }}
           />
@@ -99,7 +113,7 @@ const CourseList = () => {
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-64'>
-        <p className='text-gray-600 animate-pulse'>Loading Courses...</p>
+        <p className='text-gray-600 animate-pulse'>Loading Teachers...</p>
       </div>
     )
   }
@@ -122,12 +136,12 @@ const CourseList = () => {
       {show &&
         <ConfirmationModal
           title='Delete Confirmation'
-          message='Are you sure you want to remove this course?'
+          message='Are you sure you want to remove this teacher?'
           confirmText='Delete'
           confirmColor='red'
           onCancel={() => setShow(false)}
           onConfirm={() => {
-            onDelete(selectedCourse ?? '')
+            onDelete(selectedTeacher ?? '')
           }}
         />
       }
@@ -135,4 +149,4 @@ const CourseList = () => {
   )
 }
 
-export default CourseList;
+export default TeacherList;

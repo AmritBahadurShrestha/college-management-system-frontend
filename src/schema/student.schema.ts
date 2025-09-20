@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { Gender } from '../types/enum';
 
 export const StudentSchema = yup.object({
     fullName: yup.string().required('Full name is required'),
@@ -6,7 +7,7 @@ export const StudentSchema = yup.object({
     phone: yup.string().required('Phone number is required'),
     address: yup.string().required('Address is required'),
     dob: yup.date().required('Date of birth is required'),
-    gender: yup.string().oneOf(['Male', 'Female', 'Other'], 'Invalid gender').required('Gender is required'),
+    gender: yup.mixed<Gender>().oneOf(Object.values(Gender), 'Invalid gender').required('Gender is required'),
     rollNumber: yup.string().required('Roll number is required'),
     registrationNumber: yup.string().required('Registration number is required'),
     program: yup.string().required('Program is required'),

@@ -1,19 +1,22 @@
 import type { IResponse } from './global.types';
+import type { ICourseResponse } from './course.types';
+import type { IStudentResponse } from './student.types';
+import type { ITeacherResponse } from './teacher.types';
 
 export interface IClassData {
     name: string;
     program: string;
     semester: number;
-    students?: string[]; // ObjectIds referencing students
-    courses?: string[];  // ObjectIds referencing courses
-    teacher?: string;    // ObjectId referencing teacher
+    students?: string[];
+    courses?: string[];
+    teacher?: string;
 }
 
 export interface IClassResponse extends IResponse {
     name: string;
     program: string;
     semester: number;
-    students?: string[]; // ObjectIds referencing students
-    courses?: string[];  // ObjectIds referencing courses
-    teacher?: string;    // ObjectId referencing teacher
+    students?: IStudentResponse[];
+    courses?: ICourseResponse[];
+    teacher?: ITeacherResponse;
 }
