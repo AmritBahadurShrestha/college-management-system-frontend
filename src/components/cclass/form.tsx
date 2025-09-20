@@ -2,16 +2,16 @@ import toast from 'react-hot-toast';
 import Button from '../common/button';
 import Input from '../common/inputs/input';
 import { useNavigate } from 'react-router';
+import { getAllCourses } from '../../api/course.api';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { getAllStudents } from '../../api/student.api';
+import { getAllTeachers } from '../../api/teacher.api';
+import SelectInput from '../common/inputs/select.input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ClassSchema } from '../../schema/class.schema';
 import { postClass, updateClass } from '../../api/class.api';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { IClassData, IClassResponse } from '../../types/class.types';
-import { getAllTeachers } from '../../api/teacher.api';
-import SelectInput from '../common/inputs/select.input';
-import { getAllCourses } from '../../api/course.api';
-import { getAllStudents } from '../../api/student.api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface IProps {
     data?: IClassResponse
@@ -89,29 +89,11 @@ const ClassForm: React.FC<IProps> = ({ data: classData }) => {
     })
 
     const onSubmit = (data: IClassData) => {
-
-        const { name, program, semester, students, courses, teacher } = data
-        const formData = new FormData()
-
         console.log('Class Form', data)
-
-        formData.append('name', name);
-        formData.append('program', program);
-        formData.append('semester', String(semester));
-        formData.append('teacher', String(teacher));
-
-        if (Array.isArray(students)) {
-            students.forEach((studentId) => formData.append('students', studentId));
-        }
-
-        if (Array.isArray(courses)) {
-            courses.forEach((courseId) => formData.append('courses', courseId));
-        }
-
         if (classData) {
-            updateMutation({ formData, _id: classData?._id })
+            updateMutation({ ...data, _id: classData?._id })
         } else {
-            mutate(formData)
+            mutate(data)
         }
     };
 
