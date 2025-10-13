@@ -9,7 +9,7 @@ export interface IAttendanceData {
     class: string;
     course: string;
     date: Date | string;
-    status: AttendanceStatus;
+    status: string;
     remarks?: string;
 }
 
