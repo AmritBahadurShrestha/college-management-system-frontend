@@ -85,7 +85,6 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
     // Submit handler
     const onSubmit = (data: IAttendanceData) => {
         if (attendance) {
-            console.log('Updating attendance:', attendance?._id, data);
             updateMutation({ ...data, _id: attendance?._id })
         } else {
             mutate(data)
