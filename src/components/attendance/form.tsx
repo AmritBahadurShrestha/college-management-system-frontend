@@ -2,13 +2,13 @@ import toast from 'react-hot-toast';
 import Button from '../common/button';
 import Input from '../common/inputs/input';
 import { useNavigate } from 'react-router';
-import { getAllClasses } from '../../api/class.api';
 import { AttendanceStatus } from '../../types/enum';
-import { getAllCourses } from '../../api/course.api';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getAllStudents } from '../../api/student.api';
 import SelectInput from '../common/inputs/select.input';
 import { FormProvider, useForm } from 'react-hook-form';
+import { getAllCoursesList } from '../../api/course.api';
+import { getAllClassesList } from './../../api/class.api';
+import { getAllStudentsList } from '../../api/student.api';
 import { AttendanceSchema } from '../../schema/attendance.schema';
 import { postAttendance, updateAttendance } from '../../api/attendance.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -43,15 +43,15 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
 
     // Fetch dropdown data
     const { data: studentsData } = useQuery({
-        queryFn: getAllStudents,
+        queryFn: getAllStudentsList,
         queryKey: ['students']
     });
     const { data: classesData } = useQuery({
-        queryFn: getAllClasses,
+        queryFn: getAllClassesList,
         queryKey: ['classes']
     });
     const { data: coursesData } = useQuery({
-        queryFn: getAllCourses,
+        queryFn: getAllCoursesList,
         queryKey: ['courses']
     });
 
@@ -64,7 +64,6 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
       mutationFn: postAttendance,
       onSuccess: (response) => {
         toast.success(response.message || 'Attendance Added')
-        queryClient.invalidateQueries({ queryKey: ['attendance'] })
         reset()
       },
       onError: (error: any) =>
@@ -76,7 +75,7 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
       mutationFn: updateAttendance,
       onSuccess: (response) => {
         toast.success(response.message || 'Attendance Updated')
-        queryClient.invalidateQueries({ queryKey: ['attendance'] })
+        queryClient.invalidateQueries({ queryKey: ['get_attendance_by_id', attendance?._id] })
         navigate('/attendance')
       },
       onError: (error) =>
@@ -86,6 +85,7 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
     // Submit handler
     const onSubmit = (data: IAttendanceData) => {
         if (attendance) {
+            console.log('Updating attendance:', attendance?._id, data);
             updateMutation({ ...data, _id: attendance?._id })
         } else {
             mutate(data)
@@ -106,7 +106,7 @@ const AttendanceForm: React.FC<IProps> = ({ data: attendance }) => {
                         name='student'
                         label='Student'
                         required
-                        options={students.map((s: any) => ({ value: s._id, label: s.fullName })) || []}
+                        options={students.map((s: any) => ({ value: s._id, label: s.fullName }))}
                     />
 
                     {/* Class */}

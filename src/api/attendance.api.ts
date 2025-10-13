@@ -12,9 +12,9 @@ export const postAttendance = async (data: IAttendanceData) => {
 };
 
 // Get all attendance records
-export const getAllAttendance = async () => {
+export const getAllAttendance = async (page:number, perPage:number) => {
     try {
-        const response = await api.get('/attendance');
+        const response = await api.get(`/attendance?current_page=${page}&per_page=${perPage}`);
         return response.data;
     } catch (error: any) {
         throw error.response.data;

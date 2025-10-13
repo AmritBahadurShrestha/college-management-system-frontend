@@ -2,13 +2,13 @@ import toast from 'react-hot-toast';
 import Button from '../common/button';
 import Input from '../common/inputs/input';
 import { useNavigate } from 'react-router';
-import { getAllCourses } from '../../api/course.api';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getAllStudents } from '../../api/student.api';
-import { getAllTeachers } from '../../api/teacher.api';
 import SelectInput from '../common/inputs/select.input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ClassSchema } from '../../schema/class.schema';
+import { getAllCoursesList } from '../../api/course.api';
+import { getAllStudentsList } from '../../api/student.api';
+import { getAllTeachersList } from '../../api/teacher.api';
 import { postClass, updateClass } from '../../api/class.api';
 import type { IClassData, IClassResponse } from '../../types/class.types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -47,19 +47,19 @@ const ClassForm: React.FC<IProps> = ({ data: classData }) => {
 
     // Query for teacher
     const { data: teacher, isLoading: teacherLoading } = useQuery({
-        queryFn: getAllTeachers, // your API function
+        queryFn: getAllTeachersList, // your API function
         queryKey: ['teacher']
     })
 
     // Query for students
     const { data: students, isLoading: studentsLoading } = useQuery({
-        queryFn: getAllStudents, // your API function
+        queryFn: getAllStudentsList, // your API function
         queryKey: ['students'],
     });
 
     // Query for courses
     const { data: courses, isLoading: coursesLoading } = useQuery({
-        queryFn: getAllCourses, // your API function
+        queryFn: getAllCoursesList, // your API function
         queryKey: ['courses'],
     });
 

@@ -12,9 +12,19 @@ export const postCourse = async (data: ICourseData) => {
 };
 
 // Get all courses
-export const getAllCourses = async () => {
+export const getAllCourses = async (page:number, perPage:number) => {
     try {
-        const response = await api.get('/course');
+        const response = await api.get(`/course?current_page=${page}&per_page=${perPage}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+};
+
+// Get all courses list used in all forms
+export const getAllCoursesList = async () => {
+    try {
+        const response = await api.get('/course/all');
         return response.data;
     } catch (error: any) {
         throw error.response.data;

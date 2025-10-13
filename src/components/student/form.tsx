@@ -3,12 +3,12 @@ import Button from '../common/button';
 import { Gender } from '../../types/enum';
 import Input from '../common/inputs/input';
 import { useNavigate } from 'react-router';
-import { getAllCourses } from '../../api/course.api';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ImageInput from '../common/inputs/image.input';
 import GenderInput from '../common/inputs/gender.input';
 import SelectInput from '../common/inputs/select.input';
 import { FormProvider, useForm } from 'react-hook-form';
+import { getAllCoursesList } from '../../api/course.api';
 import { StudentSchema } from '../../schema/student.schema';
 import { postStudent, updateStudent } from '../../api/student.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -48,7 +48,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
 
     // Query for courses
     const { data: courses, isLoading: coursesLoading } = useQuery({
-        queryFn: getAllCourses, // your API function
+        queryFn: getAllCoursesList, // your API function
         queryKey: ['courses'],
     });
 

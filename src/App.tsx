@@ -27,8 +27,8 @@ import CreateAttendance from './pages/attendance/add.attendance'
 import UpdateAttendance from './pages/attendance/update.attendance'
 
 import ProfilePage from './pages/profilepage'
+
 import PageNotFound from './pages/page-not.found'
-import AttendanceDashboard from './pages/attendance.dashboard'
 
 function App() {
 
@@ -70,8 +70,6 @@ function App() {
             <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/>
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
-
-            <Route path = '/attendance/dashboard' element = { <AttendanceDashboard /> }/>
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>

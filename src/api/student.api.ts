@@ -11,9 +11,19 @@ export const postStudent = async (data: FormData) => {
 };
 
 // Get all students
-export const getAllStudents = async () => {
+export const getAllStudents = async (page:number, perPage:number) => {
     try {
-        const response = await api.get('/student');
+        const response = await api.get(`/student?current_page=${page}&per_page=${perPage}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+};
+
+// Get all students list used in all forms
+export const getAllStudentsList = async () => {
+    try {
+        const response = await api.get('/student/all');
         return response.data;
     } catch (error: any) {
         throw error.response.data;

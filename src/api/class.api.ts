@@ -12,9 +12,19 @@ export const postClass = async (data: IClassData) => {
 };
 
 // Get all classes
-export const getAllClasses = async () => {
+export const getAllClasses = async (page:number, perPage:number) => {
     try {
-        const response = await api.get('/class');
+        const response = await api.get(`/class?current_page=${page}&per_page=${perPage}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+};
+
+// Get all classes list used in all forms
+export const getAllClassesList = async () => {
+    try {
+        const response = await api.get('/class/all');
         return response.data;
     } catch (error: any) {
         throw error.response.data;

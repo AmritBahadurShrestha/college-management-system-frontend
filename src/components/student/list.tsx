@@ -9,14 +9,17 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const StudentList = () => {
 
+  const [page, setPage] = useState(1)
+  const perPage = 5
+
   const [show, setShow] = useState(false)
   const [selectedStudent, setselectedStudent] = useState(null)
 
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-      queryFn: getAllStudents,
-      queryKey: ['get_all_students']
+      queryFn: () => {return getAllStudents(page, perPage)},
+      queryKey: ['get_all_students', page]
   })
 
   // Delete Mutation
@@ -154,7 +157,12 @@ const StudentList = () => {
     <>
       <div className='h-full w-full bg-white rounded-sm border-gray-100'>
         <div className='h-full w-full overflow-x-auto'>
-          <Table columns={columns} data={data?.data}/>
+          <Table
+            columns={columns}
+            data={data?.data}
+            pagination={data?.pagination} // send pagination from backend
+            onPageChange={setPage}
+          />
         </div>
       </div>
       {show &&

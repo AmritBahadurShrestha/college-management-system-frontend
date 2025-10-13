@@ -31,6 +31,5 @@ export const sidebarLinks: SidebarLink[] = [
   { label: 'Courses', to: '/course' },
   { label: 'Classes', to: '/class' },
   { label: 'Attendances', to: '/attendance' },
-  { label: 'Attendance Dashboard', to: '/attendance/dashboard' },
   { label: 'Profile', to: '/profile' },
 ];

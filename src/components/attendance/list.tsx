@@ -9,101 +9,102 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const AttendanceList = () => {
 
-    const [showForm, setShowForm] = useState(false)
-    const [selectedRecord, setSelectedRecord] = useState(null)
-    
-    const queryClient = useQueryClient()
+  const [page, setPage] = useState(1)
+  const perPage = 5
 
-    // Fetch all attendance records
-    const { data, isLoading } = useQuery({
-        queryFn: getAllAttendance,
-        queryKey: ['get_all_attendance']
-    })
+  const [showForm, setShowForm] = useState(false)
+  const [selectedRecord, setSelectedRecord] = useState(null)
+  
+  const queryClient = useQueryClient()
 
-    // Delete attendance mutation
-    const { mutate, isPending } = useMutation({
-        mutationFn: deleteAttendance,
-        onSuccess: (response) => {
-            toast.success(response?.message ?? 'Attendance Deleted')
-            queryClient.invalidateQueries({ queryKey: ['get_all_attendance'] })
-            setShowForm(false)
-        },
-        onError: (error) => {
-            toast.error(error.message ?? 'Failed to delete attendance')
-        },
-    });
+  // Fetch all attendance records
+  const { data, isLoading } = useQuery({
+      queryFn: () => {return getAllAttendance(page, perPage)},
+      queryKey: ['get_all_attendance', page]
+  })
 
-    const onDelete = (id:string) => {
-        mutate(id)
-    }
-
-    // Table columns
-    const columnHelper = createColumnHelper<any>()
-
-    const columns = [
-        columnHelper.accessor(row => row.student?.fullName, { id: 'student', header: 'Student' }),
-        columnHelper.accessor(row => row.class?.name, { id: 'class', header: 'Class' }),
-        columnHelper.accessor(row => row.course?.name, { id: 'course', header: 'Course' }),
-        columnHelper.accessor(row => new Date(row.date).toLocaleDateString(), { id: 'date', header: 'Date' }),
-        columnHelper.accessor(row => row.status, { id: 'status', header: 'Status' }),
-        columnHelper.accessor(row => row.remarks || '-', { id: 'remarks', header: 'Remarks' }),
-
-        columnHelper.accessor('_', {
-          header: () => <span>Actions</span>,
-          footer: info => info.column.id,
-          cell: ({ row: {original} }) => {
-            return (
-              <ActionButtons
-                edit_link={`/attendance/edit/${original?._id}`}
-                onDelete={ () => {
-                  setSelectedRecord(original?._id)
-                  setShowForm(true)
-                }}
-              />
-            )
-          }
-        }),
-    ]
-
-    // Loading and Pending states
-    if (isLoading) {
-      return (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-gray-600 animate-pulse">Loading Attendance...</p>
-        </div>
-      );
-    }
-
-    if (isPending) {
-      return (
-        <div className="flex justify-center items-center h-64 bg-white/60 rounded-xl shadow-inner">
-          <p className="text-blue-600 font-medium animate-bounce">Please Wait...</p>
-        </div>
-      );
-    }
-
+  // Delete attendance mutation
+  const { mutate, isPending } = useMutation({
+      mutationFn: deleteAttendance,
+      onSuccess: (response) => {
+          toast.success(response?.message ?? 'Attendance Deleted')
+          queryClient.invalidateQueries({ queryKey: ['get_all_attendances'] })
+          setShowForm(false)
+      },
+      onError: (error) => {
+          toast.error(error.message ?? 'Failed to delete attendance')
+      },
+  });
+  const onDelete = (id:string) => {
+      mutate(id)
+  }
+  // Table columns
+  const columnHelper = createColumnHelper<any>()
+  const columns = [
+      columnHelper.accessor(row => row.student?.fullName, { id: 'student', header: 'Student' }),
+      columnHelper.accessor(row => row.class?.name, { id: 'class', header: 'Class' }),
+      columnHelper.accessor(row => row.course?.name, { id: 'course', header: 'Course' }),
+      columnHelper.accessor(row => new Date(row.date).toLocaleDateString(), { id: 'date', header: 'Date' }),
+      columnHelper.accessor(row => row.status, { id: 'status', header: 'Status' }),
+      columnHelper.accessor(row => row.remarks || '-', { id: 'remarks', header: 'Remarks' }),
+      columnHelper.accessor('_', {
+        header: () => <span>Actions</span>,
+        footer: info => info.column.id,
+        cell: ({ row: {original} }) => {
+          return (
+            <ActionButtons
+              edit_link={`/attendance/edit/${original?._id}`}
+              onDelete={ () => {
+                setSelectedRecord(original?._id)
+                setShowForm(true)
+              }}
+            />
+          )
+        }
+      }),
+  ]
+  // Loading and Pending states
+  if (isLoading) {
     return (
-      <>
-        <div className='h-full w-full bg-white rounded-sm border-gray-100'>
-            <div className='h-full w-full overflow-x-auto'>
-                <Table columns={columns} data={data?.data}/>
-            </div>
-        </div>
-        {/* Delete Confirmation Modal */}
-        {showForm && (
-          <ConfirmationModal
-            title="Delete Attendance"
-            message="Are you sure you want to delete this attendance record?"
-            confirmText="Delete"
-            confirmColor="red"
-            onCancel={() => setShowForm(false)}
-            onConfirm={() => {
-                onDelete(selectedRecord ?? '')
-            }}
-          />
-        )}
-      </>
-    )
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-600 animate-pulse">Loading Attendance...</p>
+      </div>
+    );
+  }
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-64 bg-white/60 rounded-xl shadow-inner">
+        <p className="text-blue-600 font-medium animate-bounce">Please Wait...</p>
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className='h-full w-full bg-white rounded-sm border-gray-100'>
+          <div className='h-full w-full overflow-x-auto'>
+              <Table
+                columns={columns}
+                data={data?.data}
+                pagination={data?.pagination} // send pagination from backend
+                onPageChange={setPage}
+              />
+          </div>
+      </div>
+      {/* Delete Confirmation Modal */}
+      {showForm && (
+        <ConfirmationModal
+          title="Delete Attendance"
+          message="Are you sure you want to delete this attendance record?"
+          confirmText="Delete"
+          confirmColor="red"
+          onCancel={() => setShowForm(false)}
+          onConfirm={() => {
+              onDelete(selectedRecord ?? '')
+          }}
+        />
+      )}
+    </>
+  )
 }
 
 export default AttendanceList;
