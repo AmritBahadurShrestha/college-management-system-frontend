@@ -1,5 +1,5 @@
 import api from './';
-import type { IAttendanceData, IAttendanceResponse } from '../types/attendance.types';
+import type { IAttendanceData } from '../types/attendance.types';
 
 // Create attendance
 export const postAttendance = async (data: IAttendanceData) => {
@@ -32,7 +32,7 @@ export const getAttendanceById = async (id: string) => {
 };
 
 // Update attendance
-export const updateAttendance = async ({ _id, ...data } : Partial<IAttendanceResponse>) => {
+export const updateAttendance = async ({ _id, ...data } : Partial<IAttendanceData>) => {
     try {
         const response = await api.put(`/attendance/${_id}`, data);
         return response.data;

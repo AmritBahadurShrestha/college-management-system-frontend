@@ -116,6 +116,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
         <div>
         {/* Hook Form Provider */}
         <FormProvider {...methods}>
+            {/* @ts-expect-error //ts*/}
             <form onSubmit={methods.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 
                 <div className='flex flex-col gap-6'>

@@ -5,6 +5,7 @@ import type { ICourseResponse } from './course.types';
 import type { IStudentResponse } from './student.types';
 
 export interface IAttendanceData {
+    _id?:string;
     student: string;
     class: string;
     course: string;

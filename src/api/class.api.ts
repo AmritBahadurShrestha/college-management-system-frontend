@@ -1,5 +1,5 @@
 import api from './';
-import type { IClassData, IClassResponse } from '../types/class.types';
+import type { IClassData } from '../types/class.types';
 
 // Create a class
 export const postClass = async (data: IClassData) => {
@@ -42,7 +42,7 @@ export const getClassById = async (id: string) => {
 };
 
 // Update a class
-export const updateClass = async ({ _id, ...data } : Partial<IClassResponse>) => {
+export const updateClass = async ({ _id, ...data } : Partial<IClassData>) => {
     try {
         const response = await api.put(`/class/${_id}`, data);
         return response.data;
