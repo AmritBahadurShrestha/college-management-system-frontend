@@ -40,29 +40,56 @@ const AttendanceList = () => {
   }
   // Table columns
   const columnHelper = createColumnHelper<any>()
-  const columns = [
-      columnHelper.accessor(row => row.student?.fullName, { id: 'student', header: 'Student' }),
-      columnHelper.accessor(row => row.class?.name, { id: 'class', header: 'Class' }),
-      columnHelper.accessor(row => row.course?.name, { id: 'course', header: 'Course' }),
-      columnHelper.accessor(row => new Date(row.date).toLocaleDateString(), { id: 'date', header: 'Date' }),
-      columnHelper.accessor(row => row.status, { id: 'status', header: 'Status' }),
-      columnHelper.accessor(row => row.remarks || '-', { id: 'remarks', header: 'Remarks' }),
-      columnHelper.accessor('_', {
-        header: () => <span>Actions</span>,
-        footer: info => info.column.id,
-        cell: ({ row: {original} }) => {
-          return (
-            <ActionButtons
-              edit_link={`/attendance/edit/${original?._id}`}
-              onDelete={ () => {
-                setSelectedRecord(original?._id)
-                setShowForm(true)
-              }}
-            />
-          )
-        }
-      }),
-  ]
+const columns = [
+  columnHelper.accessor(row => row.student?.fullName, { id: 'student', header: 'Student' }),
+  columnHelper.accessor(row => row.class?.name, { id: 'class', header: 'Class' }),
+  columnHelper.accessor(row => row.course?.name, { id: 'course', header: 'Course' }),
+  columnHelper.accessor(row => new Date(row.date).toLocaleDateString(), { id: 'date', header: 'Date' }),
+  
+  // Status column with dropdown
+  columnHelper.accessor(row => row.status, {
+    id: 'status',
+    header: 'Status',
+    cell: ({ row: { original }, getValue }) => {
+      const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        // Optional: call a function to update status in state or API
+        const newStatus = e.target.value
+        console.log(`Update status for ${original._id}:`, newStatus)
+        // Example: updateStateOrAPI(original._id, newStatus)
+      }
+
+      return (
+        <select
+          defaultValue={getValue()}
+          onChange={handleChange}
+          className="px-2 py-1 border border-gray-300 rounded text-sm"
+        >
+          <option value="PRESENT">PRESENT</option>
+          <option value="ABSENT">ABSENT</option>
+          <option value="LEAVE">LEAVE</option> {/* optional extra status */}
+        </select>
+      )
+    }
+  }),
+
+  columnHelper.accessor(row => row.remarks || '-', { id: 'remarks', header: 'Remarks' }),
+  columnHelper.accessor('_', {
+    header: () => <span>Actions</span>,
+    footer: info => info.column.id,
+    cell: ({ row: { original } }) => {
+      return (
+        <ActionButtons
+          edit_link={`/attendance/edit/${original?._id}`}
+          onDelete={() => {
+            setSelectedRecord(original?._id)
+            setShowForm(true)
+          }}
+        />
+      )
+    }
+  }),
+]
+
   // Loading and Pending states
   if (isLoading) {
     return (

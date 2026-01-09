@@ -6,6 +6,7 @@ import ConfirmationModal from '../modal/confirmation.modal';
 import ActionButtons from '../common/table/extra-action-button';
 import { deleteStudent, getAllStudents } from '../../api/student.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import TableSkeleton from '../../skeleton/LoadingSkeleton';
 
 
 interface IProps{
@@ -155,7 +156,8 @@ console.log({data})
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-64'>
-        <p className='text-gray-600 animate-pulse'>Loading Students...</p>
+        {/* <p className='text-gray-600 animate-pulse'>Loading Students...</p> */}
+        <TableSkeleton />
       </div>
     )
   }
