@@ -11,7 +11,7 @@ export const postStudent = async (data: FormData) => {
 };
 
 // Get all students
-export const getAllStudents = async (page:number, perPage:number,params?:{query?:string}) => {
+export const getAllStudents = async (page:number, perPage:number,params?:{query:string}) => {
     try {
         const response = await api.get(`/student?current_page=${page}&per_page=${perPage}`,{
             params

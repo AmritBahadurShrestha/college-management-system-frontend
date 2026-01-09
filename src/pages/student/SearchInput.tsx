@@ -9,7 +9,7 @@ const SearchInput: React.FC<IProps> = ({ placeholder, id, tempInputValue,setTemp
   return (
     <div className="p-2">
       <input
-      defaultValue={tempInputValue}
+      value={tempInputValue}
       onChange={(e)=>setTempInputValue(e.target.value)}
         type="text"
         id={id}

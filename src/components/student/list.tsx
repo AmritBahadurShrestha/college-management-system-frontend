@@ -7,7 +7,11 @@ import ActionButtons from '../common/table/extra-action-button';
 import { deleteStudent, getAllStudents } from '../../api/student.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const StudentList = () => {
+
+interface IProps{
+  inputValue:string
+}
+const StudentList:React.FC<IProps> = ({inputValue}) => {
 
   const [page, setPage] = useState(1)
   const perPage = 5
@@ -17,17 +21,28 @@ const StudentList = () => {
 
   const queryClient = useQueryClient()
 
-  const { data, isLoading } = useQuery({
-      queryFn: () => {return getAllStudents(page, perPage)},
-      queryKey: ['get_all_students', page]
-  })
+const { data, isLoading } = useQuery({
+  queryKey: ['get_all_students', page, inputValue],
+  queryFn: () =>
+    getAllStudents(
+      page,
+      perPage,
+      {query:inputValue}
+    ),
+
+});
+
+console.log({data})
 
   // Delete Mutation
   const { mutate, isPending } = useMutation({
       mutationFn: deleteStudent,
       onSuccess: (response) => {
           toast.success(response.message ?? 'Student Deleted')
-          queryClient.invalidateQueries({queryKey: ['get_all_students']})
+          queryClient.invalidateQueries({
+  queryKey: ['get_all_students'],
+  exact: false,
+})
           setShow(false)
       },
       onError: (error) => {

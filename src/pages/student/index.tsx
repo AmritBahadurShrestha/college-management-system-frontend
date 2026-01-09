@@ -1,12 +1,21 @@
 import StudentList from '../../components/student/list';
 import PageHeader from '../../components/header/page-header';
 import SearchInput from './SearchInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const StudentPage = () => {
   const [tempInputValue, setTempInputValue] = useState("")
+  const [inputValue, setInputValue] = useState("")
 
-  console.log({tempInputValue})
+  useEffect(()=>{
+    const interval = setTimeout(()=>{
+      setInputValue(tempInputValue)
+    },500)
+
+    return()=> clearTimeout(interval)
+  },[tempInputValue])
+
+  console.log({inputValue})
   return (
     <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
@@ -38,7 +47,7 @@ const StudentPage = () => {
           {/* Horizontal line */}
           <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
-          <StudentList/>
+          <StudentList inputValue={inputValue}/>
 
         </div>
       </div>
