@@ -1,9 +1,14 @@
 import StudentList from '../../components/student/list';
 import PageHeader from '../../components/header/page-header';
+import SearchInput from './SearchInput';
+import { useState } from 'react';
 
 const StudentPage = () => {
+  const [tempInputValue, setTempInputValue] = useState("")
+
+  console.log({tempInputValue})
   return (
-    <main className='min-h-screen w-full p-0'>
+    <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
       {/* Page Header */}
       <PageHeader
@@ -13,9 +18,16 @@ const StudentPage = () => {
         button_text='Add Student'
         link_to='/student/add'
       />
+      
+      {/*serach inputField  */}
+      <SearchInput 
+      tempInputValue={tempInputValue}
+      setTempInputValue={setTempInputValue}
+      placeholder='Search students' id='search'/>
+
 
       {/* Main content */}
-      <div className='mx-auto w-full sm:px-0 lg:px-0 mt-6 md:mt-6'>
+      <div className='mx-auto w-full sm:px-0 lg:px-0'>
         
         {/* Intro */}
         <div className='bg-white shadow-sm rounded-sm p-4 sm:p-6 md:p-8'>
