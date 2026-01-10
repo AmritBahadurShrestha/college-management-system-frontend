@@ -12,9 +12,11 @@ export const postClass = async (data: IClassData) => {
 };
 
 // Get all classes
-export const getAllClasses = async (page:number, perPage:number) => {
+export const getAllClasses = async (page:number, perPage:number, params?:{query:string}) => {
     try {
-        const response = await api.get(`/class?current_page=${page}&per_page=${perPage}`);
+        const response = await api.get(`/class?current_page=${page}&per_page=${perPage}`,{
+            params
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;

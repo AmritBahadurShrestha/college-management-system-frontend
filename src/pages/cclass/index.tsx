@@ -1,9 +1,24 @@
+import { useEffect, useState } from 'react';
 import ClassList from '../../components/cclass/list';
 import PageHeader from '../../components/header/page-header';
+import SearchInput from './SearchInput';
 
 const ClassPage = () => {
+  const [tempInputValue, setTempInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(()=>{
+    const interval = setTimeout(()=>{
+      setInputValue(tempInputValue)
+    },500)
+
+    return()=> clearTimeout(interval)
+  },[tempInputValue])
+
+  console.log({inputValue})
+
   return (
-    <main className='min-h-screen w-full p-0'>
+    <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
       {/* Page Header */}
       <PageHeader
@@ -14,8 +29,14 @@ const ClassPage = () => {
         link_to='/class/add'
       />
 
+      {/* search inputField */}
+      <SearchInput
+      tempInputValue={tempInputValue}
+      setTempInputValue={setTempInputValue}
+      placeholder='Search classes' id='search'/>
+
       {/* Main content */}
-      <div className='mx-auto w-full sm:px-0 lg:px-0 mt-6 md:mt-6'>
+      <div className='mx-auto w-full sm:px-0 lg:px-0'>
         
         {/* Intro */}
         <div className='bg-white shadow-sm rounded-sm p-4 sm:p-6 md:p-8'>
@@ -26,7 +47,7 @@ const ClassPage = () => {
           {/* Horizontal line */}
           <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
-          <ClassList/>
+          <ClassList inputValue={inputValue}/>
 
         </div>
       </div>

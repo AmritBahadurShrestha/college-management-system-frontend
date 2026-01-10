@@ -16,7 +16,7 @@ const SearchInput: React.FC<IProps> = ({ placeholder, id, tempInputValue,setTemp
         placeholder={placeholder}
         className="
           w-full sm:w-1/3
-          px-4 py-2
+          px-2 py-2
           text-sm text-gray-700
           bg-white
           border border-gray-300

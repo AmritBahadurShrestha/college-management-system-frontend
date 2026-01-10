@@ -1,9 +1,24 @@
+import { useEffect, useState } from 'react';
 import CourseList from '../../components/course/list';
 import PageHeader from '../../components/header/page-header';
+import SearchInput from './SearchInput';
 
 const CoursePage = () => {
+  const [tempInputValue, setTempInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(()=>{
+    const interval = setTimeout(()=>{
+      setInputValue(tempInputValue)
+    },500)
+
+    return()=> clearTimeout(interval)
+  },[tempInputValue])
+
+  console.log({inputValue})
+
   return (
-    <main className='min-h-screen w-full p-0'>
+    <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
       {/* Page Header */}
       <PageHeader
@@ -14,8 +29,14 @@ const CoursePage = () => {
         link_to='/course/add'
       />
 
+      {/* search inputField */}
+      <SearchInput
+      tempInputValue={tempInputValue}
+      setTempInputValue={setTempInputValue}
+      placeholder='Search courses' id='search'/>
+
       {/* Main content */}
-      <div className='mx-auto w-full sm:px-0 lg:px-0 mt-6 md:mt-6'>
+      <div className='mx-auto w-full sm:px-0 lg:px-0'>
         
         {/* Intro */}
         <div className='bg-white shadow-sm rounded-sm p-4 sm:p-6 md:p-8'>
@@ -26,7 +47,7 @@ const CoursePage = () => {
           {/* Horizontal line */}
           <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
-          <CourseList/>
+          <CourseList inputValue={inputValue}/>
 
         </div>
       </div>
