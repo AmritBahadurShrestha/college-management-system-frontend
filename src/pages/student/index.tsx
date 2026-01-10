@@ -4,8 +4,8 @@ import SearchInput from './SearchInput';
 import { useEffect, useState } from 'react';
 
 const StudentPage = () => {
-  const [tempInputValue, setTempInputValue] = useState("")
-  const [inputValue, setInputValue] = useState("")
+  const [tempInputValue, setTempInputValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
 
   useEffect(()=>{
     const interval = setTimeout(()=>{
@@ -16,6 +16,7 @@ const StudentPage = () => {
   },[tempInputValue])
 
   console.log({inputValue})
+
   return (
     <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
@@ -28,12 +29,11 @@ const StudentPage = () => {
         link_to='/student/add'
       />
       
-      {/*serach inputField  */}
+      {/* search inputField */}
       <SearchInput 
       tempInputValue={tempInputValue}
       setTempInputValue={setTempInputValue}
       placeholder='Search students' id='search'/>
-
 
       {/* Main content */}
       <div className='mx-auto w-full sm:px-0 lg:px-0'>

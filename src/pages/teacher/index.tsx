@@ -18,7 +18,7 @@ const TeacherPage = () => {
   console.log({inputValue})
 
   return (
-    <main className='min-h-screen w-full p-0'>
+    <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
       
       {/* Page Header */}
       <PageHeader
@@ -29,14 +29,14 @@ const TeacherPage = () => {
         link_to='/teacher/add'
       />
 
-      {/*serach inputField  */}
+      {/* search Input */}
       <SearchInput 
       tempInputValue={tempInputValue}
       setTempInputValue={setTempInputValue}
-      placeholder='Search students' id='search'/>
+      placeholder='Search teachers' id='search'/>
 
       {/* Main content */}
-      <div className='mx-auto w-full sm:px-0 lg:px-0 mt-6 md:mt-6'>
+      <div className='mx-auto w-full sm:px-0 lg:px-0'>
         
         {/* Intro */}
         <div className='bg-white shadow-sm rounded-sm p-4 sm:p-6 md:p-8'>
