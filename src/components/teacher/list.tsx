@@ -7,7 +7,11 @@ import ConfirmationModal from '../modal/confirmation.modal';
 import { deleteTeacher, getAllTeachers } from '../../api/teacher.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const TeacherList = () => {
+interface IProps{
+  inputValue:string
+}
+
+const TeacherList:React.FC<IProps> = ({inputValue}) => {
 
   const [page, setPage] = useState(1)
   const perPage = 5
@@ -18,9 +22,11 @@ const TeacherList = () => {
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-      queryFn: () => {return getAllTeachers(page, perPage)},
-      queryKey: ['get_all_teachers', page]
+      queryFn: () => getAllTeachers(page, perPage, {query:inputValue}),
+      queryKey: ['get_all_teachers', page, inputValue]
   })
+
+  console.log({data})
 
   // Delete Mutation
   const { mutate, isPending } = useMutation({
