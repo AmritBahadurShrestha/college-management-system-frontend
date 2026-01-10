@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { dashboard } from '../../api/dashboard.api';
 import CountCard from '../../components/dashboard/count-card';
-import GenderChart from '../../components/dashboard/GenderChart';
+import GenderCharts from '../../components/dashboard/GenderChart';
 
 interface DashboardData {
   students: number
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
       </div>
 
       <div>
-        <GenderChart/>
+        <GenderCharts/>
       </div>
     </main>
   )
