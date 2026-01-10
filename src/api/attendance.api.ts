@@ -51,7 +51,9 @@ export const deleteAttendance = async (id: string) => {
     }
 };
 
-export const postBulkAttendance = async (data: any) => {
-  const response = await api.post('/attendance/bulk', data);
-  return response.data;
+
+export const postBulkAttendance = async (payload: any) => {
+  const res = await api.post('/attendance/bulk', payload);
+  return res.data;
 };
+

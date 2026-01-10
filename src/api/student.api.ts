@@ -64,6 +64,6 @@ export const deleteStudent = async (id:string) => {
 
 
 export const getStudentsByClass = async (classId: string) => {
-  const response = await api.get(`/students/class/${classId}`);
-  return response.data;
+  const res = await api.get(`/students/class/${classId}`);
+  return res.data; // { success, data, message }
 };

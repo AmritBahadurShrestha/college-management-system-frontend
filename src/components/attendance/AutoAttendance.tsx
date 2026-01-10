@@ -13,50 +13,64 @@ const AutoAttendance = () => {
   const [date, setDate] = useState('');
   const [records, setRecords] = useState<any[]>([]);
 
-  // Fetch Classes
+  /* ---------------- FETCH CLASSES ---------------- */
   const { data: classes } = useQuery({
     queryKey: ['classes'],
     queryFn: getAllClassesList,
   });
 
-  // Fetch Courses
+  /* ---------------- FETCH COURSES ---------------- */
   const { data: courses } = useQuery({
     queryKey: ['courses'],
     queryFn: getAllCoursesList,
   });
 
-  // Fetch Students by selected class
-  const { data: students, isFetching: studentsLoading } = useQuery({
+  /* ---------------- FETCH STUDENTS ---------------- */
+  const {
+    data: studentsResponse,
+    isFetching: studentsLoading,
+  } = useQuery({
     queryKey: ['students_by_class', classId],
     queryFn: () => getStudentsByClass(classId),
     enabled: !!classId,
   });
 
-  // Populate attendance records whenever students change
+  const students = studentsResponse?.data || [];
+
+  /* ---------------- INIT ATTENDANCE RECORDS ---------------- */
   useEffect(() => {
-  if (students?.data) {
-    const initialRecords = students.data.map((s: any) => ({
-      student: s._id,
-      status: AttendanceStatus.PRESENT,
-      remarks: '',
-    }));
-    setRecords(initialRecords);
-  }
-  console.log('Students API response:', students);
-}, [students]);
+    if (!students.length) {
+      setRecords([]);
+      return;
+    }
 
+    setRecords(
+      students.map((s: any) => ({
+        student: s._id,
+        status: AttendanceStatus.PRESENT,
+        remarks: '',
+      }))
+    );
+  }, [classId, students.length]);
 
-  // Mutation to submit bulk attendance
-  const { mutate, isPending: submitting } = useMutation({
+  /* ---------------- SUBMIT MUTATION ---------------- */
+  const { mutate, isPending } = useMutation({
     mutationFn: postBulkAttendance,
-    onSuccess: (res: any) => toast.success(res.message || 'Attendance saved!'),
-    onError: (err: any) => toast.error(err.message || 'Failed to save attendance'),
+    onSuccess: (res: any) =>
+      toast.success(res.message || 'Attendance saved successfully'),
+    onError: (err: any) =>
+      toast.error(err.message || 'Failed to save attendance'),
   });
 
-  // Submit handler
+  /* ---------------- SUBMIT HANDLER ---------------- */
   const submitAttendance = () => {
     if (!classId || !courseId || !date) {
       toast.error('Please select Class, Course, and Date');
+      return;
+    }
+
+    if (!records.length) {
+      toast.error('No attendance records to submit');
       return;
     }
 
@@ -70,9 +84,11 @@ const AutoAttendance = () => {
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md">
-      <h2 className="text-xl font-bold mb-4 text-center">Auto Attendance</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">
+        Auto Attendance
+      </h2>
 
-      {/* Filters */}
+      {/* ---------------- FILTERS ---------------- */}
       <div className="flex gap-4 mb-6 flex-wrap">
         <select
           className="border p-2 rounded"
@@ -108,11 +124,10 @@ const AutoAttendance = () => {
         />
       </div>
 
-      {/* Students Table */}
+      {/* ---------------- STUDENT TABLE ---------------- */}
       {studentsLoading ? (
         <p>Loading students...</p>
-      ) : students?.data?.length > 0 && records.length === students.data.length
- ? (
+      ) : students.length ? (
         <table className="w-full border-collapse border">
           <thead>
             <tr className="bg-gray-100">
@@ -121,22 +136,31 @@ const AutoAttendance = () => {
             </tr>
           </thead>
           <tbody>
-            {students.data.map((s: any, idx: number) => (
+            {students.map((s: any, idx: number) => (
               <tr key={s._id} className="hover:bg-gray-50">
                 <td className="border p-2">{s.fullName}</td>
                 <td className="border p-2">
                   <select
                     className="border p-1 rounded"
-                    value={records[idx]?.status || AttendanceStatus.PRESENT}
+                    value={records[idx]?.status}
                     onChange={(e) => {
                       const updated = [...records];
-                      updated[idx].status = e.target.value;
+                      updated[idx] = {
+                        ...updated[idx],
+                        status: e.target.value,
+                      };
                       setRecords(updated);
                     }}
                   >
-                    <option value={AttendanceStatus.PRESENT}>PRESENT</option>
-                    <option value={AttendanceStatus.ABSENT}>ABSENT</option>
-                    <option value={AttendanceStatus.LEAVE}>LEAVE</option>
+                    <option value={AttendanceStatus.PRESENT}>
+                      PRESENT
+                    </option>
+                    <option value={AttendanceStatus.ABSENT}>
+                      ABSENT
+                    </option>
+                    <option value={AttendanceStatus.LEAVE}>
+                      LEAVE
+                    </option>
                   </select>
                 </td>
               </tr>
@@ -149,15 +173,17 @@ const AutoAttendance = () => {
         <p>Please select a class to see students.</p>
       )}
 
-      {/* Submit Button */}
+      {/* ---------------- SUBMIT BUTTON ---------------- */}
       <button
         onClick={submitAttendance}
-        disabled={submitting || !records.length}
+        disabled={isPending || !records.length}
         className={`mt-4 px-6 py-2 rounded text-white ${
-          submitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          isPending
+            ? 'bg-gray-400'
+            : 'bg-blue-600 hover:bg-blue-700'
         }`}
       >
-        {submitting ? 'Submitting...' : 'Submit Attendance'}
+        {isPending ? 'Submitting...' : 'Submit Attendance'}
       </button>
     </div>
   );
