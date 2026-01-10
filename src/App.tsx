@@ -29,7 +29,8 @@ import UpdateAttendance from './pages/attendance/update.attendance'
 import ProfilePage from './pages/profilepage'
 
 import PageNotFound from './pages/page-not.found'
-import AutoAttendance from './components/attendance/AutoAttendance'
+import AttendanceAutoPage from './pages/attendance/AttendancePage'
+// import AutoAttendance from './components/attendance/AutoAttendance'
 
 function App() {
 
@@ -67,7 +68,7 @@ function App() {
 
             {/* Attendance */}
             {/* <Route path='/attendance' element= { <AttendancePage /> }/> */}
-            <Route path='/attendance' element= { <AutoAttendance /> }/>
+            <Route path='/attendance' element= { <AttendanceAutoPage /> }/>
             <Route path='/attendance/add' element= { <CreateAttendance /> }/>
             <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/>
 
