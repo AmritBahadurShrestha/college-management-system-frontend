@@ -66,8 +66,8 @@ const GenderChart: React.FC = () => {
             outerRadius={100}
             label
           >
-            {pieData.map((_, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            {pieData.map((entry, index) => (
+              <Cell key={entry.name} fill={COLORS[index]} />
             ))}
           </Pie>
           <Tooltip />
