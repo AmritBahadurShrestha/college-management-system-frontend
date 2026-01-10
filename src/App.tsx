@@ -22,13 +22,14 @@ import ClassPage from './pages/cclass'
 import CreateClass from './pages/cclass/add.class'
 import UpdateClass from './pages/cclass/update.class'
 
-import AttendancePage from './pages/attendance'
+// import AttendancePage from './pages/attendance'
 import CreateAttendance from './pages/attendance/add.attendance'
 import UpdateAttendance from './pages/attendance/update.attendance'
 
 import ProfilePage from './pages/profilepage'
 
 import PageNotFound from './pages/page-not.found'
+import AutoAttendance from './components/attendance/AutoAttendance'
 
 function App() {
 
@@ -65,7 +66,8 @@ function App() {
             <Route path='/class/edit/:id' element= { <UpdateClass /> }/>
 
             {/* Attendance */}
-            <Route path='/attendance' element= { <AttendancePage /> }/>
+            {/* <Route path='/attendance' element= { <AttendancePage /> }/> */}
+            <Route path='/attendance' element= { <AutoAttendance /> }/>
             <Route path='/attendance/add' element= { <CreateAttendance /> }/>
             <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/>
 
