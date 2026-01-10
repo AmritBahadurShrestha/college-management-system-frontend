@@ -11,6 +11,7 @@ interface DashboardData {
 }
 
 const AdminDashboard = () => {
+
   const { data, isLoading } = useQuery<DashboardData>({
     queryFn: dashboard,
     queryKey: ['dashboard'],
@@ -58,7 +59,9 @@ const AdminDashboard = () => {
         />
       </div>
 
-      <GenderChart/>
+      <div>
+        <GenderChart/>
+      </div>
     </main>
   )
 }
