@@ -50,3 +50,8 @@ export const deleteAttendance = async (id: string) => {
         throw error.response.data;
     }
 };
+
+export const postBulkAttendance = async (data: any) => {
+  const response = await api.post('/attendance/bulk', data);
+  return response.data;
+};
