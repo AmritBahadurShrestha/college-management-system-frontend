@@ -34,15 +34,17 @@ const AutoAttendance = () => {
 
   // Populate attendance records whenever students change
   useEffect(() => {
-    if (students?.data) {
-      const initialRecords = students.data.map((s: any) => ({
-        student: s._id,
-        status: AttendanceStatus.PRESENT,
-        remarks: '',
-      }));
-      setRecords(initialRecords);
-    }
-  }, [students]);
+  if (students?.data) {
+    const initialRecords = students.data.map((s: any) => ({
+      student: s._id,
+      status: AttendanceStatus.PRESENT,
+      remarks: '',
+    }));
+    setRecords(initialRecords);
+  }
+  console.log('Students API response:', students);
+}, [students]);
+
 
   // Mutation to submit bulk attendance
   const { mutate, isPending: submitting } = useMutation({
@@ -109,7 +111,8 @@ const AutoAttendance = () => {
       {/* Students Table */}
       {studentsLoading ? (
         <p>Loading students...</p>
-      ) : students?.data?.length > 0 ? (
+      ) : students?.data?.length > 0 && records.length === students.data.length
+ ? (
         <table className="w-full border-collapse border">
           <thead>
             <tr className="bg-gray-100">
@@ -124,7 +127,7 @@ const AutoAttendance = () => {
                 <td className="border p-2">
                   <select
                     className="border p-1 rounded"
-                    value={records[idx]?.status}
+                    value={records[idx]?.status || AttendanceStatus.PRESENT}
                     onChange={(e) => {
                       const updated = [...records];
                       updated[idx].status = e.target.value;
