@@ -22,6 +22,7 @@ import ClassPage from './pages/cclass'
 import CreateClass from './pages/cclass/add.class'
 import UpdateClass from './pages/cclass/update.class'
 
+import AutoAttendance from './pages/attendance/AutoAttendance'
 // import AttendancePage from './pages/attendance'
 // import CreateAttendance from './pages/attendance/add.attendance'
 // import UpdateAttendance from './pages/attendance/update.attendance'
@@ -29,7 +30,6 @@ import UpdateClass from './pages/cclass/update.class'
 import ProfilePage from './pages/profilepage'
 
 import PageNotFound from './pages/page-not.found'
-import AutoAttendance from './pages/attendance/AutoAttendance'
 
 function App() {
 
