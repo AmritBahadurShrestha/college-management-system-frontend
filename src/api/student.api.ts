@@ -67,7 +67,7 @@ export const deleteStudent = async (id:string) => {
 export const getStudents = async (): Promise<IStudentData[]> => {
     try {
         const response = await api.get('/student/chart');
-        return response.data.data;
+        return response.data;
     } catch (error: any) {
         throw error.response.data;
     }
