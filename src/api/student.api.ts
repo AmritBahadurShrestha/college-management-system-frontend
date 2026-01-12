@@ -1,3 +1,4 @@
+import type { IStudentData } from '../types/student.types';
 import api from './';
 
 // Create student (FormData for profile upload)
@@ -62,6 +63,15 @@ export const deleteStudent = async (id:string) => {
     }
 };
 
+// Get Students in Chart
+export const getStudents = async () : Promise<IStudentData[]> => {
+    try {
+        const response = await api.get('/students');
+        return response.data.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+};
 
 // Get Students By Class
 export const getStudentsByClass = async (classId: string) => {
