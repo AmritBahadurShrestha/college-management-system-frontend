@@ -64,7 +64,7 @@ export const deleteStudent = async (id:string) => {
 };
 
 // Get Students in Chart
-export const getStudents = async () : Promise<IStudentData[]> => {
+export const getStudents = async (): Promise<IStudentData[]> => {
     try {
         const response = await api.get('/students');
         return response.data.data;
@@ -72,6 +72,7 @@ export const getStudents = async () : Promise<IStudentData[]> => {
         throw error.response.data;
     }
 };
+
 
 // Get Students By Class
 export const getStudentsByClass = async (classId: string) => {

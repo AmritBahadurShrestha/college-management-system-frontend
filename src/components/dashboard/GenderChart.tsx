@@ -91,8 +91,8 @@ interface PieData {
 const COLORS = ['#0088FE', '#FF8042'];
 
 const GenderChart: React.FC<{ students?: IStudentData[] }> = ({ students }) => {
-  const maleCount = (students || []).filter(s => s.gender === Gender.MALE).length;
-  const femaleCount = (students || []).filter(s => s.gender === Gender.FEMALE).length;
+  const maleCount = (students || []).filter(s => s.gender.toUpperCase() === Gender.MALE).length;
+const femaleCount = (students || []).filter(s => s.gender.toUpperCase() === Gender.FEMALE).length;
 
   if (!students || students.length === 0) {
     return <p className="text-center text-gray-500">No student data available</p>;
