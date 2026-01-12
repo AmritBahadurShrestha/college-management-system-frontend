@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { dashboard } from '../../api/dashboard.api';
 import CountCard from '../../components/dashboard/count-card';
 import GenderChart from '../../components/dashboard/GenderChart';
-import { getAllStudentsList } from '../../api/student.api';
+import { getAllStudents } from '../../api/student.api';
 import type { IStudentData } from '../../types/student.types';
 
 interface DashboardData {
@@ -20,9 +20,15 @@ const AdminDashboard = () => {
   })
 
   // Fetch students for GenderChart
+  // const { data: students } = useQuery<IStudentData[]>({
+  //   queryFn: getAllStudentsList,
+  //   queryKey: ['students'],
+  // });
+
+  // Fetch all students (for GenderChart)
   const { data: students } = useQuery<IStudentData[]>({
-    queryFn: getAllStudentsList,
-    queryKey: ['students'],
+    queryKey: ['students', 1, 1000], // page=1, perPage=1000
+    queryFn: () => getAllStudents(1, 1000), // fetch first 1000 students
   });
 
   if (isLoading) {
