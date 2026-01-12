@@ -67,12 +67,11 @@ export const deleteStudent = async (id:string) => {
 export const getStudents = async (): Promise<IStudentData[]> => {
     try {
         const response = await api.get('/student/chart');
-        return response.data;
+        return response.data.data;
     } catch (error: any) {
         throw error.response.data;
     }
 };
-
 
 // Get Students By Class
 export const getStudentsByClass = async (classId: string) => {
