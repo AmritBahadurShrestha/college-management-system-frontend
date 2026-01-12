@@ -67,5 +67,6 @@ export const deleteStudent = async (id:string) => {
 // Get Students By Class
 export const getStudentsByClass = async (classId: string) => {
   const res = await axios.get(`/student/class/${classId}`);
-  return res.data.data;
+  return res.data; 
 };
+
