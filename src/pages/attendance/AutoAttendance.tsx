@@ -58,10 +58,11 @@ const AutoAttendance = () => {
 
   /* Fetch Students by Class */
   useEffect(() => {
-    if (!classId) return;
+  if (!classId) return;
 
-    getStudentsByClass(classId).then(res => {
-      const studentsData = res.data?.data || [];
+  getStudentsByClass(classId)
+    .then(res => {
+      const studentsData = res?.data || []; // this is the array
       setStudents(studentsData);
 
       const initialStatus: Record<string, AttendanceStatus> = {};
@@ -69,8 +70,13 @@ const AutoAttendance = () => {
         initialStatus[s._id] = AttendanceStatus.PRESENT;
       });
       setStatusMap(initialStatus);
+    })
+    .catch(err => {
+      toast.error(err?.message || 'Failed to fetch students');
+      setStudents([]);
     });
-  }, [classId]);
+}, [classId]);
+
 
   /* Auto-save Attendance Mutation */
   const { mutate } = useMutation<

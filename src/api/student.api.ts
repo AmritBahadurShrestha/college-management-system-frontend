@@ -1,5 +1,4 @@
 import api from './';
-import axios from 'axios';
 
 // Create student (FormData for profile upload)
 export const postStudent = async (data: FormData) => {
@@ -66,7 +65,10 @@ export const deleteStudent = async (id:string) => {
 
 // Get Students By Class
 export const getStudentsByClass = async (classId: string) => {
-  const res = await axios.get(`/student/class/${classId}`);
-  return res.data; 
+    try {
+        const response = await api.get(`/student/class/${classId}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
 };
-
