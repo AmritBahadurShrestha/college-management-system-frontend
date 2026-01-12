@@ -81,6 +81,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import type { IStudentData } from '../../types/student.types';
+import { Gender } from '../../types/enum';
 
 interface PieData {
   name: string;
@@ -89,9 +90,13 @@ interface PieData {
 
 const COLORS = ['#0088FE', '#FF8042'];
 
-const GenderChart: React.FC<{ student?: IStudentData[] }> = ({ student }) => {
-  const maleCount = (student || []).filter(s => s.gender === 'MALE').length;
-  const femaleCount = (student || []).filter(s => s.gender === 'FEMALE').length;
+const GenderChart: React.FC<{ students?: IStudentData[] }> = ({ students }) => {
+  const maleCount = (students || []).filter(s => s.gender === Gender.MALE).length;
+  const femaleCount = (students || []).filter(s => s.gender === Gender.FEMALE).length;
+
+  if (!students || students.length === 0) {
+    return <p className="text-center text-gray-500">No student data available</p>;
+  }
 
   const pieData: PieData[] = [
     { name: 'Male', value: maleCount },
@@ -102,10 +107,6 @@ const GenderChart: React.FC<{ student?: IStudentData[] }> = ({ student }) => {
     { gender: 'Male', count: maleCount },
     { gender: 'Female', count: femaleCount },
   ];
-
-  if (!student || student.length === 0) {
-    return <p className="text-center text-gray-500">No student data available</p>;
-  }
 
   return (
     <div className="flex flex-col md:flex-row justify-around items-center gap-8 p-4">
@@ -148,4 +149,3 @@ const GenderChart: React.FC<{ student?: IStudentData[] }> = ({ student }) => {
 };
 
 export default GenderChart;
-

@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { dashboard } from '../../api/dashboard.api';
 import CountCard from '../../components/dashboard/count-card';
 import GenderChart from '../../components/dashboard/GenderChart';
+import { getAllStudentsList } from '../../api/student.api';
+import type { IStudentData } from '../../types/student.types';
 
 interface DashboardData {
   students: number
@@ -16,6 +18,12 @@ const AdminDashboard = () => {
     queryFn: dashboard,
     queryKey: ['dashboard'],
   })
+
+  // Fetch students for GenderChart
+  const { data: students } = useQuery<IStudentData[]>({
+    queryFn: getAllStudentsList,
+    queryKey: ['students'],
+  });
 
   if (isLoading) {
   return (
@@ -59,8 +67,8 @@ const AdminDashboard = () => {
         />
       </div>
 
-      <div>
-        <GenderChart/>
+      <div className='mt-8'>
+        <GenderChart students={students}/>
       </div>
     </main>
   )
