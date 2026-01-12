@@ -30,7 +30,7 @@ const DashboardLayout = () => {
         <Header toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <main className='mt-16 p-6 flex-1 overflow-auto bg-gray-400'>
+        <main className='mt-16 p-6 flex-1 overflow-auto bg-gray-300'>
           <Outlet />
         </main>
       </div>
