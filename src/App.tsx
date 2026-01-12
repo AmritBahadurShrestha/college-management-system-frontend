@@ -23,8 +23,8 @@ import CreateClass from './pages/cclass/add.class'
 import UpdateClass from './pages/cclass/update.class'
 
 // import AttendancePage from './pages/attendance'
-import CreateAttendance from './pages/attendance/add.attendance'
-import UpdateAttendance from './pages/attendance/update.attendance'
+// import CreateAttendance from './pages/attendance/add.attendance'
+// import UpdateAttendance from './pages/attendance/update.attendance'
 
 import ProfilePage from './pages/profilepage'
 
@@ -68,8 +68,8 @@ function App() {
             {/* Attendance */}
             <Route path='/attendance' element= { <AutoAttendance /> }/>
             {/* <Route path='/attendance' element= { <AttendancePage /> }/> */}
-            <Route path='/attendance/add' element= { <CreateAttendance /> }/>
-            <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/>
+            {/* <Route path='/attendance/add' element= { <CreateAttendance /> }/> */}
+            {/* <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/> */}
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
 
