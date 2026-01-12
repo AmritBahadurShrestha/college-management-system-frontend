@@ -1,103 +1,78 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-
 import AttendanceToggle from '../../components/attendance/AttendanceToggle';
 import { AttendanceStatus } from '../../types/enum';
-
 import { postAttendance } from '../../api/attendance.api';
 import { getStudentsByClass } from '../../api/student.api';
 import { getAllClassesList } from '../../api/class.api';
 import { getAllCoursesList } from '../../api/course.api';
-
-import type {
-  IAttendanceData,
-  IAttendanceResponse
-} from '../../types/attendance.types';
-
-interface IClass {
-  _id: string;
-  name: string;
-}
-
-interface ICourse {
-  _id: string;
-  name: string;
-}
-
-interface IStudent {
-  _id: string;
-  name: string;
-}
+import type { IAttendanceData, IAttendanceResponse } from '../../types/attendance.types';
+import type { IStudentResponse } from '../../types/student.types';
+import type { IClassResponse } from '../../types/class.types';
+import type { ICourseResponse } from '../../types/course.types';
 
 const AutoAttendance = () => {
-  const [classes, setClasses] = useState<IClass[]>([]);
-  const [courses, setCourses] = useState<ICourse[]>([]);
-  const [students, setStudents] = useState<IStudent[]>([]);
+  const [classes, setClasses] = useState<IClassResponse[]>([]);
+  const [courses, setCourses] = useState<ICourseResponse[]>([]);
+  const [students, setStudents] = useState<IStudentResponse[]>([]);
 
   const [classId, setClassId] = useState('');
   const [courseId, setCourseId] = useState('');
-  const [date, setDate] = useState(
-    new Date().toISOString().split('T')[0]
-  );
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
-  const [statusMap, setStatusMap] = useState<
-    Record<string, AttendanceStatus>
-  >({});
+  const [statusMap, setStatusMap] = useState<Record<string, AttendanceStatus>>({});
 
-  /* Fetch Classes & Courses */
+  /* Fetch Classes & Courses on mount */
   useEffect(() => {
-    getAllClassesList().then(res => {
-      setClasses(res.data || res);
-    });
+    getAllClassesList()
+      .then(res => setClasses(res.data || res))
+      .catch(() => toast.error('Failed to fetch classes'));
 
-    getAllCoursesList().then(res => {
-      setCourses(res.data || res);
-    });
+    getAllCoursesList()
+      .then(res => setCourses(res.data || res))
+      .catch(() => toast.error('Failed to fetch courses'));
   }, []);
 
-  /* Fetch Students by Class */
+  /* Fetch Students whenever classId changes */
   useEffect(() => {
-  if (!classId) return;
-
-  getStudentsByClass(classId)
-    .then(res => {
-      const studentsData = res?.data || []; // this is the array
-      setStudents(studentsData);
-
-      const initialStatus: Record<string, AttendanceStatus> = {};
-      studentsData.forEach((s: IStudent) => {
-        initialStatus[s._id] = AttendanceStatus.PRESENT;
-      });
-      setStatusMap(initialStatus);
-    })
-    .catch(err => {
-      toast.error(err?.message || 'Failed to fetch students');
+    if (!classId) {
       setStudents([]);
-    });
-}, [classId]);
+      setStatusMap({});
+      return;
+    }
 
+    getStudentsByClass(classId)
+      .then(res => {
+        const studentsData: IStudentResponse[] = res?.data?.data || res?.data || []; // adapt to API
+        setStudents(studentsData);
+
+        const initialStatus: Record<string, AttendanceStatus> = {};
+        studentsData.forEach(student => {
+          initialStatus[student._id] = AttendanceStatus.PRESENT;
+        });
+        setStatusMap(initialStatus);
+      })
+      .catch(err => {
+        toast.error(err?.message || 'Failed to fetch students');
+        setStudents([]);
+        setStatusMap({});
+      });
+  }, [classId]);
 
   /* Auto-save Attendance Mutation */
-  const { mutate } = useMutation<
-    IAttendanceResponse,
-    Error,
-    IAttendanceData
-  >({
+  const { mutate } = useMutation<IAttendanceResponse, Error, IAttendanceData>({
     mutationFn: postAttendance,
     onSuccess: () => {
       toast.success('Attendance saved');
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to save');
-    }
+      toast.error(error.response?.data?.message || 'Failed to save attendance');
+    },
   });
 
   /* Handle Status Change */
-  const handleStatusChange = (
-    studentId: string,
-    status: AttendanceStatus
-  ) => {
+  const handleStatusChange = (studentId: string, status: AttendanceStatus) => {
     if (!classId || !courseId) {
       toast.error('Please select class and course first');
       return;
@@ -110,16 +85,13 @@ const AutoAttendance = () => {
       class: classId,
       course: courseId,
       date,
-      status
+      status,
     });
   };
 
-  {/* UI */}
   return (
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow p-6">
-      <h2 className="text-xl font-semibold mb-4 text-center">
-        Auto Attendance
-      </h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">Auto Attendance</h2>
 
       {/* Filters */}
       <div className="grid grid-cols-3 gap-4 mb-6">
@@ -176,13 +148,11 @@ const AutoAttendance = () => {
 
           {students.map(student => (
             <tr key={student._id} className="border-t">
-              <td className="p-2">{student.name}</td>
+              <td className="p-2">{student.fullName}</td>
               <td className="p-2 text-center">
                 <AttendanceToggle
-                  value={statusMap[student._id]}
-                  onChange={status =>
-                    handleStatusChange(student._id, status)
-                  }
+                  value={statusMap[student._id] || AttendanceStatus.PRESENT}
+                  onChange={status => handleStatusChange(student._id, status)}
                 />
               </td>
             </tr>
