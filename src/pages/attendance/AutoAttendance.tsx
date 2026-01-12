@@ -7,7 +7,7 @@ import { postAttendance } from '../../api/attendance.api';
 import { getStudentsByClass } from '../../api/student.api';
 import type { IAttendanceData, IAttendanceResponse } from '../../types/attendance.types';
 
-export default function AutoAttendance() {
+const AutoAttendance = () => {
   const [classId, setClassId] = useState('');
   const [courseId, setCourseId] = useState('');
   const [date, setDate] = useState(
@@ -147,3 +147,5 @@ export default function AutoAttendance() {
     </div>
   );
 }
+
+export default AutoAttendance;
