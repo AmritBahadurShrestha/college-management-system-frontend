@@ -28,7 +28,7 @@ const StudentView = () => {
     <div className="min-h-screen bg-gray-100 p-6 flex justify-center items-start">
 
       {/* Card with gradient */}
-      <div className="max-w-6xl w-full bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 rounded-2xl shadow-xl p-8">
+      <div className="max-w-6xl w-full bg-gradient-to-r from-pink-200 via-purple-200 to-blue-300 rounded-2xl shadow-xl p-8">
         {/* Back Button */}
         <div className="mb-4 flex justify-between items-center print:hidden">
           <button
@@ -44,7 +44,7 @@ const StudentView = () => {
           >
             ← Back to List
           </button>
-    
+
           <button
             onClick={() => window.print()}
             className="inline-flex items-center gap-2
@@ -58,7 +58,7 @@ const StudentView = () => {
             Print / PDF
           </button>
         </div>
-    
+
         {/* Card Content */}
         <div className="flex flex-col md:flex-row gap-6 items-center md:items-start mb-8">
           {/* Profile Image */}
@@ -69,7 +69,7 @@ const StudentView = () => {
               className="h-full w-full object-cover"
             />
           </div>
-    
+
           {/* Basic Info */}
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-2xl font-bold text-gray-800">
@@ -84,20 +84,20 @@ const StudentView = () => {
                 year: 'numeric'
               })}
             </p>
-          
+
             <div className="mt-3 inline-block px-3 py-1 rounded-full text-sm
                             bg-indigo-100 text-indigo-700 font-medium">
               {student.gender}
             </div>
           </div>
         </div>
-          
+
         {/* Divider */}
         <div className="border-t my-6"></div>
-          
+
         {/* Details Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           {/* Academic Info */}
           <div className="bg-white rounded-xl p-6 shadow-inner">
             <h3 className="text-lg font-semibold text-gray-700 mb-4">
@@ -112,7 +112,7 @@ const StudentView = () => {
               </p>
             </div>
           </div>
-          
+
           {/* Meta Info */}
           <div className="bg-white rounded-xl p-6 shadow-inner">
             <h3 className="text-lg font-semibold text-gray-700 mb-4">
@@ -124,7 +124,7 @@ const StudentView = () => {
               <p><b>Address:</b> {student.address}</p>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
