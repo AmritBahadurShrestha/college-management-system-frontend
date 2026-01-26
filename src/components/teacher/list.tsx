@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import Table from '../common/table/table';
+import Table from '../common/table/extra-table';
 import ActionButtons from '../common/table/extra-action-button';
 import { createColumnHelper } from '@tanstack/react-table';
 import ConfirmationModal from '../modal/confirmation.modal';
