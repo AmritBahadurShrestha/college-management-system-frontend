@@ -108,6 +108,7 @@ const TeacherList:React.FC<IProps> = ({inputValue}) => {
       cell: ({ row: {original} }) => {
         return (
           <ActionButtons
+          view_link={`/teacher/view/${original?._id}`}
             edit_link={`/teacher/edit/${original?._id}?name=${original.fullName}`}
             onDelete={ () => {
               setselectedTeacher(original?._id)
