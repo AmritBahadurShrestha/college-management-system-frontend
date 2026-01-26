@@ -142,6 +142,7 @@ console.log({data})
       cell: ({ row: {original} }) => {
         return (
           <ActionButtons
+            view_link={`/student/view/${original?._id}`}
             edit_link={`/student/edit/${original?._id}?name=${original.fullName}`}
             onDelete={ () => {
               setselectedStudent(original?._id)

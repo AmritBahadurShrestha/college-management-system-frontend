@@ -4,9 +4,10 @@ import { CiEdit, CiTrash } from 'react-icons/ci';
 interface IProps {
   onDelete: () => void;
   edit_link?: string;
+  view_link?: string;
 }
 
-const ActionButtons: React.FC<IProps> = ({ edit_link = '#', onDelete }) => {
+const ActionButtons: React.FC<IProps> = ({ edit_link = '#', view_link, onDelete }) => {
   return (
     <div className='flex items-center gap-2 flex-wrap justify-center w-full'>
       <Link
@@ -20,6 +21,15 @@ const ActionButtons: React.FC<IProps> = ({ edit_link = '#', onDelete }) => {
       >
         <CiEdit size={20} className='cursor-pointer' />
       </Link>
+
+      {view_link && (
+        <Link
+          to={view_link}
+          className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          View
+        </Link>
+      )}
 
       <button
         onClick={onDelete}

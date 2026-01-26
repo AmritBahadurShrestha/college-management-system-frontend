@@ -9,6 +9,7 @@ import AdminDashboard from './pages/dashboard/admin-dashboard'
 import StudentPage from './pages/student'
 import CreateStudent from './pages/student/add.student'
 import UpdateStudent from './pages/student/update.student'
+import StudentView from './pages/student/StudentView'
 
 import TeacherPage from './pages/teacher'
 import CreateTeacher from './pages/teacher/add.teacher'
@@ -49,6 +50,7 @@ function App() {
             <Route path='/student' element= { <StudentPage /> }/>
             <Route path='/student/add' element= { <CreateStudent /> }/>
             <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
+            <Route path='/student/view/:id' element={<StudentView />} />
 
             {/* Teacher */}
             <Route path='/teacher' element= { <TeacherPage /> }/>
