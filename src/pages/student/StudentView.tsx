@@ -28,21 +28,35 @@ const StudentView = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 p-6">
 
       {/* Back Button */}
-      <div className="max-w-6xl mx-auto mb-4">
-        <button
-          onClick={() => navigate('/student')}
-          className="inline-flex items-center gap-2
-                     px-4 py-2 rounded-lg
-                     bg-white text-indigo-600 font-medium
-                     shadow-sm border border-indigo-100
-                     hover:bg-indigo-600 hover:text-white
-                     hover:shadow-md hover:-translate-y-0.5
-                     transition-all duration-200
-                     cursor-pointer"
-        >
-          ← Back to List
-        </button>
-      </div>
+      <div className="max-w-6xl mx-auto mb-4 flex justify-between items-center print:hidden">
+      <button
+        onClick={() => navigate('/student')}
+        className="inline-flex items-center gap-2
+                   px-4 py-2 rounded-lg
+                   bg-white text-indigo-600 font-medium
+                   shadow-sm border border-indigo-100
+                   hover:bg-indigo-600 hover:text-white
+                   hover:shadow-md hover:-translate-y-0.5
+                   transition-all duration-200
+                   cursor-pointer"
+      >
+        ← Back to List
+      </button>
+
+      <button
+        onClick={() => window.print()}
+        className="inline-flex items-center gap-2
+                   px-4 py-2 rounded-lg
+                   bg-indigo-600 text-white font-medium
+                   shadow-sm
+                   hover:bg-indigo-700 hover:shadow-md
+                   transition-all duration-200
+                   cursor-pointer"
+      >
+        Print / PDF
+      </button>
+    </div>
+
 
       {/* Card */}
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl p-8">
@@ -66,6 +80,7 @@ const StudentView = () => {
             </h2>
             <p className="text-gray-500 mt-1">{student.email}</p>
             <p className="text-gray-500">{student.phone}</p>
+            <p className="text-gray-500">{student.dob}</p>
 
             <div className="mt-3 inline-block px-3 py-1 rounded-full text-sm
                             bg-indigo-100 text-indigo-700 font-medium">
