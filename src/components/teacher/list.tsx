@@ -70,10 +70,10 @@ const TeacherList:React.FC<IProps> = ({inputValue}) => {
       header: () => <span>Email</span>,
       cell: info => info.getValue(),
     }),
-    columnHelper.accessor('phone', {
-      header: () => <span>Phone No.</span>,
-      cell: info => info.getValue(),
-    }),
+    // columnHelper.accessor('phone', {
+    //   header: () => <span>Phone No.</span>,
+    //   cell: info => info.getValue(),
+    // }),
     columnHelper.accessor('gender', {
       header: () => <span>Gender</span>,
       cell: info => info.getValue(),
