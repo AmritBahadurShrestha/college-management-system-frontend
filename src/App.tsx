@@ -14,6 +14,7 @@ import StudentView from './pages/student/StudentView'
 import TeacherPage from './pages/teacher'
 import CreateTeacher from './pages/teacher/add.teacher'
 import UpdateTeacher from './pages/teacher/update.teacher'
+import TeacherView from './pages/teacher/TeacherView'
 
 import CoursePage from './pages/course'
 import CreateCourse from './pages/course/add.course'
@@ -56,6 +57,7 @@ function App() {
             <Route path='/teacher' element= { <TeacherPage /> }/>
             <Route path='/teacher/add' element= { <CreateTeacher /> }/>
             <Route path='/teacher/edit/:id' element= { <UpdateTeacher /> }/>
+            <Route path='/teacher/view/:id' element={<TeacherView />} />
 
             {/* Course */}
             <Route path='/course' element= { <CoursePage /> }/>
