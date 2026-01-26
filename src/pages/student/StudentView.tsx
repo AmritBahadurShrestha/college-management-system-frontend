@@ -25,7 +25,7 @@ const StudentView = () => {
   const student = data?.data;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-pink-50 via-purple-50 to-blue-50 p-6">
 
       {/* Back Button */}
       <div className="max-w-6xl mx-auto mb-4 flex justify-between items-center print:hidden">
@@ -80,7 +80,13 @@ const StudentView = () => {
             </h2>
             <p className="text-gray-500 mt-1">{student.email}</p>
             <p className="text-gray-500">{student.phone}</p>
-            <p className="text-gray-500">{student.dob}</p>
+            <p className="text-gray-500">
+              {new Date(student.dob).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long', // or '2-digit' for 06
+                year: 'numeric'
+              })}
+            </p>
 
             <div className="mt-3 inline-block px-3 py-1 rounded-full text-sm
                             bg-indigo-100 text-indigo-700 font-medium">
