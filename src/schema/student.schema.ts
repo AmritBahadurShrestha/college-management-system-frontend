@@ -6,7 +6,7 @@ export const StudentSchema = yup.object({
     email: yup.string().required('Email is required').email('Invalid email format'),
     phone: yup.string().required('Phone number is required'),
     address: yup.string().required('Address is required'),
-    dob: yup.date().required('Date of birth is required'),
+    dob: yup.date().required('Date of birth is required').max(new Date(), 'Date of birth cannot be in the future'),
     gender: yup.mixed<Gender>().oneOf(Object.values(Gender), 'Invalid gender').required('Gender is required'),
     rollNumber: yup.string().required('Roll number is required'),
     registrationNumber: yup.string().required('Registration number is required'),
