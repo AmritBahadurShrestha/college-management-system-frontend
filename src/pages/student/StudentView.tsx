@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getStudentById } from '../../api/student.api';
+import StudentSkeleton from '../../skeleton/StudentSkeleton';
 
 const StudentView = () => {
   const navigate = useNavigate();
@@ -12,15 +13,9 @@ const StudentView = () => {
     enabled: !!id,
   });
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-indigo-600 font-medium animate-pulse">
-          Loading student details...
-        </p>
-      </div>
-    );
-  }
+    if (isLoading) {
+        return <StudentSkeleton />;
+    }
 
   const student = data?.data;
 
