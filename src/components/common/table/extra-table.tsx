@@ -48,7 +48,7 @@ const Table:React.FC<IProps> = ({ columns, data=[], pagination, onPageChange }) 
 
     return (
         <div className="w-full overflow-x-auto rounded-t-lg shadow-md border border-gray-200">
-          <table className="w-full min-w-full text-sm text-gray-800 table-fixed">
+          <table className="min-w-max text-sm text-gray-800">
             <thead className='text-white sticky top-0 z-10 shadow-sm'>
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
