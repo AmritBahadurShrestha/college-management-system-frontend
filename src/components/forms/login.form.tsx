@@ -30,6 +30,7 @@ const LoginForm = () => {
     mutationFn: login,
     onSuccess: (response) => {
       toast.success(response?.message ?? 'Login Success');
+      console.log(" api data => ", response)
       setUser(response.data.data);
       navigate(navigate_to, { replace: true });
     },

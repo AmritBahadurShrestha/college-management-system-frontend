@@ -3,6 +3,7 @@ import type { ILoginData, ISignupData } from '../types/auth.types';
 
 export const login = async(data: ILoginData) => {
     try {
+        console.log(" pre login data =>  ", data )
         const response = await api.post(`/auth/login`, data);
         console.log(response);
         return response.data;
