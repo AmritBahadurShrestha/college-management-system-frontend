@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { dashboard } from '../../api/dashboard.api';
+import { getStudents } from '../../api/student.api';
 import CountCard from '../../components/dashboard/count-card';
 import GenderChart from '../../components/dashboard/GenderChart';
-import { getStudents } from '../../api/student.api';
 import type { IStudentData } from '../../types/student.types';
 
 interface DashboardData {

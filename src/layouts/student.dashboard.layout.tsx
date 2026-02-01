@@ -6,7 +6,7 @@ import SideMenu from '../components/sidebar/sidemenu';
 import { Role } from '../types/enum';
 
 
-const DashboardLayout = () => {
+const StudentDashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
@@ -39,5 +39,5 @@ const DashboardLayout = () => {
   );
 };
 
-const Component = WithAuth(DashboardLayout, [Role.ADMIN])
+const Component = WithAuth(StudentDashboardLayout, [Role.STUDENT])
 export default Component;

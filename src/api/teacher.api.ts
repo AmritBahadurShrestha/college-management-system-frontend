@@ -2,8 +2,13 @@ import api from './';
 
 // Create teacher (FormData for profile upload)
 export const postTeacher = async (data: FormData) => {
+
     try {
-        const response = await api.post('/teacher', data);
+        const response = await api.post('/teacher', data, {
+            headers: {
+            'x-access-token': localStorage.getItem('token') || ''
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;
@@ -33,9 +38,19 @@ export const getAllTeachersList = async () => {
 };
 
 // Get teacher by ID
-export const getTeacherById = async (id:string) => {
+export const getTeacherById = async (id: string) => {
     try {
         const response = await api.get(`/teacher/${id}`);
+        return response.data;
+    } catch (error: any) {
+        throw error.response.data;
+    }
+};
+
+// Get teacher by Email
+export const getTeacherByEmail = async (email: any) => {
+    try {
+        const response = await api.get(`/teacher/${email}`);
         return response.data;
     } catch (error: any) {
         throw error.response.data;
@@ -45,7 +60,12 @@ export const getTeacherById = async (id:string) => {
 // Update teacher
 export const updateTeacher = async ({ _id, formData } : { _id: string, formData: FormData }) => {
     try {
-        const response = await api.put(`/teacher/${_id}`, formData);
+        const token = localStorage.getItem('token');
+        const response = await api.put(`/teacher/${_id}`, formData, {
+            headers: {
+                'x-access-token': token
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;
@@ -53,9 +73,14 @@ export const updateTeacher = async ({ _id, formData } : { _id: string, formData:
 };
 
 // Delete teacher
-export const deleteTeacher = async (id:string) => {
+export const deleteTeacher = async (id: string) => {
     try {
-        const response = await api.delete(`/teacher/${id}`);
+        const token = localStorage.getItem('token');
+        const response = await api.delete(`/teacher/${id}`, {
+            headers: {
+                'x-access-token': token
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;

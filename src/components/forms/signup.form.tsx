@@ -1,12 +1,12 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
+import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import Input from '../common/inputs/input';
 import { useNavigate } from 'react-router';
 import { signup } from '../../api/auth.api';
-import { useMutation } from '@tanstack/react-query';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { SignupSchema } from '../../schema/auth.schema';
-import { FormProvider, useForm } from 'react-hook-form';
 import type { ISignupData } from '../../types/auth.types';
+import Input from '../common/inputs/input';
 
 const SignupForm = () => {
 

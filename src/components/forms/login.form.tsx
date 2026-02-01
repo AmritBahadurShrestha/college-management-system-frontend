@@ -1,13 +1,13 @@
-import toast from 'react-hot-toast';
-import Input from '../common/inputs/input';
-import { login } from '../../api/auth.api';
-import { useMutation } from '@tanstack/react-query';
-import { useAuth } from '../../context/auth.context';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LoginSchema } from '../../schema/auth.schema';
-import { useLocation, useNavigate } from 'react-router';
+import { useMutation } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router';
+import { login } from '../../api/auth.api';
+import { useAuth } from '../../context/auth.context';
+import { LoginSchema } from '../../schema/auth.schema';
 import type { ILoginData } from '../../types/auth.types';
+import Input from '../common/inputs/input';
 
 const LoginForm = () => {
 
@@ -31,8 +31,37 @@ const LoginForm = () => {
     onSuccess: (response) => {
       toast.success(response?.message ?? 'Login Success');
       console.log(" api data => ", response)
-      setUser(response.data.data);
-      navigate(navigate_to, { replace: true });
+
+      // if(response.isnewAdded == true ){
+      //   return " password change "
+      // }
+
+      localStorage.setItem("token", response?.access_token)
+    
+      setUser(response.data);
+      
+      if(response.data?.role === "ADMIN") {
+        navigate('/dashboard/admin', { replace: true });
+        } else if(response.data?.role === "STUDENT") {
+            if(response?.data?.isnewAdded == true){
+              navigate('/student-change-password', { replace: true });
+            }
+            else{
+
+              navigate('/dashboard/student', { replace: true });
+            }
+        } else if(response.data?.role === "TEACHER") {
+            if(response?.data?.isnewAdded == true){
+              navigate('/teacher-change-password', { replace: true });
+            }
+            else{
+
+              navigate('/dashboard/teacher', { replace: true });
+            }
+        } else {
+
+          navigate(navigate_to, { replace: true });
+        }
     },
     onError: (error) => {
       console.log(error);

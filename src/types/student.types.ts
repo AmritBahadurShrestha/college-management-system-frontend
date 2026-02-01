@@ -1,5 +1,6 @@
-import type { Gender } from './enum';
+import type { IClassResponse } from './class.types';
 import type { ICourseResponse } from './course.types';
+import type { Gender } from './enum';
 import type { IImage, IResponse } from './global.types';
 
 export interface IStudentData {
@@ -14,6 +15,7 @@ export interface IStudentData {
     program: string;
     semester: number;
     courses?: string[];
+    classes?: string[];
     profile: File | FileList;
 }
 
@@ -28,6 +30,9 @@ export interface IStudentResponse extends IResponse {
     registrationNumber: string;
     program: string;
     semester: number;
+    classes ?: IClassResponse[];
     courses?: ICourseResponse[];
     profile: IImage;
 }
+
+

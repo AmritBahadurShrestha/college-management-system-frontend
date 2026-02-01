@@ -6,6 +6,11 @@ export interface ILoginData {
     password: string;
 }
 
+export interface IChangePassword {
+    new_password: string;
+    old_password: string;
+}
+
 export interface ISignupData {
     fullName: string;
     email: string;

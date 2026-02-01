@@ -1,17 +1,18 @@
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { logout } from '../api/auth.api';
+import { AiOutlineIdcard, AiOutlineLogout, AiOutlineMail, AiOutlineUser } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../context/auth.context';
-import { useMutation } from '@tanstack/react-query';
+import { logout } from '../api/auth.api';
 import ConfirmationModal from '../components/modal/confirmation.modal';
-import { AiOutlineUser, AiOutlineIdcard, AiOutlineMail, AiOutlineLogout } from 'react-icons/ai';
+import { useAuth } from '../context/auth.context';
 
 const ProfilePage = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
+    
 
   // Mutation for logout
   const { mutate, isPending } = useMutation({
@@ -25,6 +26,10 @@ const ProfilePage = () => {
       toast.error(error?.message || 'Something went wrong')
     },
   })
+
+
+  
+
 
   if (!user) {
     return (
@@ -91,6 +96,18 @@ const ProfilePage = () => {
             <span className="text-gray-900 text-base md:text-lg">{user.email}</span>
           </div>
         </div>
+
+        {/* change password */}
+          <div className="mt-10 flex justify-center">
+            <button
+              className="flex cursor-pointer items-center gap-3 px-8 py-3 bg-blue-500 text-white font-semibold rounded-full hover:bg-blue-600 transition-colors shadow-lg text-lg"
+               onClick={() => navigate('/change-password') }
+              disabled={isPending}
+            >
+              <AiOutlineLogout className="text-xl md:text-2xl" />
+              <span>{isPending ? 'Processing...' : 'Change Password'}</span>
+            </button>
+          </div>
 
         {/* Logout Button */}
         <div className="mt-10 flex justify-center">

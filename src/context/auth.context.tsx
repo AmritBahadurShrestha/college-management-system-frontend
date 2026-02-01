@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type Dispatch, type SetStateAction } from 'react';
-import { type IUser } from '../types/auth.types';
 import { getCurrentUser } from '../api/auth.api';
+import { type IUser } from '../types/auth.types';
 
 interface IContext {
     user: null | IUser,
@@ -27,9 +27,9 @@ const AuthProvider: React.FC<{ children:React.ReactNode }> = ({ children }) => {
     useEffect(() => {
         async function fetchUser(){
         try {
-            const data = await getCurrentUser()
-            console.log(data)
-            setUser(data.data)
+            const currentUser = await getCurrentUser()
+            console.log(" data from auth => ",  currentUser.data)
+            setUser(currentUser.data)
         } catch (error) {
             console.log(error)
             setUser(null)

@@ -16,6 +16,7 @@ export const StudentSchema = yup.object({
     program: yup.string().required('Program is required'),
     semester: yup.number().min(1, 'Semester must be at least 1').max(8, 'Semester cannot exceed 8').required('Semester is required'),
     courses: yup.array().of(yup.string()).optional(),
+    classes: yup.array().of(yup.string()).optional(),
     profile: yup.mixed().required('Profile is required'),
     isActive: yup.boolean().default(true)
 })

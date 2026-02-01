@@ -1,20 +1,25 @@
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
 import { Toaster } from 'react-hot-toast'
+import { Route, BrowserRouter as Router, Routes } from 'react-router'
+import './App.css'
+import DashboardLayout from './layouts/dashboard.layout'
+import StudentDashboardLayout from './layouts/student.dashboard.layout'
+import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 import Login from './pages/auth/login'
 import Signup from './pages/auth/signup'
-import DashboardLayout from './layouts/dashboard.layout'
 import AdminDashboard from './pages/dashboard/admin-dashboard'
+import StudentDashboard from './pages/dashboard/student.dashboard'
+
+import ChangePasswordPage from './pages/changePassword/changePasswordPage'
 
 import StudentPage from './pages/student'
 import CreateStudent from './pages/student/add.student'
-import UpdateStudent from './pages/student/update.student'
 import StudentView from './pages/student/StudentView'
+import UpdateStudent from './pages/student/update.student'
 
 import TeacherPage from './pages/teacher'
 import CreateTeacher from './pages/teacher/add.teacher'
-import UpdateTeacher from './pages/teacher/update.teacher'
 import TeacherView from './pages/teacher/TeacherView'
+import UpdateTeacher from './pages/teacher/update.teacher'
 
 import CoursePage from './pages/course'
 import CreateCourse from './pages/course/add.course'
@@ -31,6 +36,7 @@ import AutoAttendance from './pages/attendance/AutoAttendance'
 
 import ProfilePage from './pages/profilepage'
 
+import TeacherDashboard from './pages/dashboard/teacher.dashboard'
 import PageNotFound from './pages/page-not.found'
 
 function App() {
@@ -46,6 +52,7 @@ function App() {
 
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
+            <Route path='/change-password' element= { <ChangePasswordPage /> }/>
 
             {/* Student */}
             <Route path='/student' element= { <StudentPage /> }/>
@@ -76,6 +83,28 @@ function App() {
             {/* <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/> */}
 
             <Route path = '/profile' element = { <ProfilePage /> }/>
+
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          <Route path='/' element= { <StudentDashboardLayout /> }>
+            <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
+            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
+            <Route path = '/profile' element = { <ProfilePage /> }/>
+
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+          <Route path='/' element= { <TeacherDashboardLayout /> }>
+            <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
+            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
+              <Route path='/student' element= { <StudentPage /> }/>
+              <Route path='/student/add' element= { <CreateStudent /> }/>
+              <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
+              <Route path='/student/view/:id' element={<StudentView />} />
+
+              <Route path = '/profile' element = { <ProfilePage /> }/>
+              <Route path='/attendance' element= { <AutoAttendance /> }/>
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>

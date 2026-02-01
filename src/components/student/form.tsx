@@ -1,18 +1,19 @@
-import toast from 'react-hot-toast';
-import Button from '../common/button';
-import { Gender } from '../../types/enum';
-import Input from '../common/inputs/input';
-import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ImageInput from '../common/inputs/image.input';
-import GenderInput from '../common/inputs/gender.input';
-import SelectInput from '../common/inputs/select.input';
-import { FormProvider, useForm } from 'react-hook-form';
-import { getAllCoursesList } from '../../api/course.api';
-import { StudentSchema } from '../../schema/student.schema';
-import { postStudent, updateStudent } from '../../api/student.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { FormProvider, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router';
+import { getAllClassesList } from '../../api/class.api';
+import { getAllCoursesList } from '../../api/course.api';
+import { postStudent, updateStudent } from '../../api/student.api';
+import { StudentSchema } from '../../schema/student.schema';
+import { Gender } from '../../types/enum';
 import type { IStudentData, IStudentResponse } from '../../types/student.types';
+import Button from '../common/button';
+import GenderInput from '../common/inputs/gender.input';
+import ImageInput from '../common/inputs/image.input';
+import Input from '../common/inputs/input';
+import SelectInput from '../common/inputs/select.input';
 
 interface IProps {
     data?: IStudentResponse
@@ -40,6 +41,11 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
                     typeof course === 'string' ? course : course._id
                   )
                 : [],
+            classes: student?.classes
+            ? student.classes.map(cls =>
+                typeof cls === 'string' ? cls : cls._id
+              )
+            : [],
             profile: '',
         },
         resolver: yupResolver(StudentSchema),
@@ -50,6 +56,11 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
     const { data: courses, isLoading: coursesLoading } = useQuery({
         queryFn: getAllCoursesList, // your API function
         queryKey: ['courses'],
+    });
+
+    const { data: classes, isLoading: classesLoading } = useQuery({
+        queryFn: getAllClassesList, // your API function
+        queryKey: ['classes'],
     });
 
     // Add Mutation
@@ -81,7 +92,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
 
     const onSubmit = (data: IStudentData) => {
 
-        const { fullName, email, phone, address, dob, gender, rollNumber, registrationNumber, program, semester, courses, profile } = data
+        const { fullName, email, phone, address, dob,classes, gender, rollNumber, registrationNumber, program, semester, courses, profile } = data
         const formData = new FormData()
 
         console.log('Student Form', data)
@@ -96,6 +107,10 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
         formData.append('registrationNumber', registrationNumber);
         formData.append('program', program);
         formData.append('semester', String(semester));
+
+        if (Array.isArray(classes)) {
+            classes.forEach((courseId) => formData.append('classes', courseId));
+        }
 
         if (Array.isArray(courses)) {
             courses.forEach((courseId) => formData.append('courses', courseId));
@@ -201,6 +216,20 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
                         multiple
                         required
                     />
+
+                    <SelectInput
+                        name="classes"
+                        id="classes"
+                        label="classes"
+                        placeholder={classesLoading ? 'Loading classes...' : 'Select classes'}
+                        options={(classes?.data || []).map((c: any) => ({
+                            label: c.name,
+                            value: c._id,
+                        }))}
+                        multiple
+                        required
+                    />
+                    
                     <ImageInput
                         id='profile'
                         name='profile'
