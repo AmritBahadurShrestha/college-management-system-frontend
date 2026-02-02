@@ -56,7 +56,7 @@ export const getTeacherById = async (id: string) => {
 // Get teacher by Email
 export const getTeacherByEmail = async (email: any) => {
   try {
-    const response = await api.get(`/teacher/${email}`);
+    const response = await api.get(`/teacher/email/${email}`);
     return response.data;
   } catch (error: any) {
     throw error.response.data;
