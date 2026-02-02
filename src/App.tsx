@@ -38,6 +38,7 @@ import ProfilePage from './pages/profilepage'
 
 import TeacherDashboard from './pages/dashboard/teacher.dashboard'
 import PageNotFound from './pages/page-not.found'
+import RoleBasedRedirect from './components/RoleBasedRedirect'
 
 function App() {
 
@@ -49,6 +50,9 @@ function App() {
 
           <Route path = '/login' element = { <Login /> }/>
           <Route path = '/signup' element = { <Signup /> }/>
+
+          {/* Root redirects to role-based dashboard */}
+          <Route path='/' element={<RoleBasedRedirect />} />
 
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
