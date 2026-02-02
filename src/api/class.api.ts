@@ -4,7 +4,12 @@ import type { IClassData } from '../types/class.types';
 // Create a class
 export const postClass = async (data: IClassData) => {
     try {
-        const response = await api.post('/class', data);
+        const token = localStorage.getItem('token');
+        const response = await api.post('/class', data, {
+            headers: {
+                'x-access-token': token
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;
@@ -46,7 +51,12 @@ export const getClassById = async (id: string) => {
 // Update a class
 export const updateClass = async ({ _id, ...data } : Partial<IClassData>) => {
     try {
-        const response = await api.put(`/class/${_id}`, data);
+        const token = localStorage.getItem('token');
+        const response = await api.put(`/class/${_id}`, data, {
+            headers: {
+                'x-access-token': token
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;
@@ -56,7 +66,12 @@ export const updateClass = async ({ _id, ...data } : Partial<IClassData>) => {
 // Delete a class
 export const deleteClass = async (id: string) => {
     try {
-        const response = await api.delete(`/class/${id}`);
+        const token = localStorage.getItem('token');
+        const response = await api.delete(`/class/${id}`, {
+            headers: {
+                'x-access-token': token
+            }
+        });
         return response.data;
     } catch (error: any) {
         throw error.response.data;
