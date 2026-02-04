@@ -238,34 +238,49 @@ const StudentDashboard = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
         <StatCard
           title='Enrolled Courses'
           value={student.courses.length}
-          icon={<FaBook size={24} />}
-          gradient='from-blue-400 to-blue-600'
+          icon={
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-indigo-400/30">
+              <FaBook size={20} className='text-white' />
+            </div>
+          }
+          gradient='from-indigo-500 to-indigo-700'
           delay='0'
         />
         <StatCard
           title='Total Credits'
           value={student.courses.reduce((sum, course) => sum + course.creditHours, 0)}
-          icon={<BsFillJournalBookmarkFill size={24} />}
-          gradient='from-purple-400 to-purple-600'
+          icon={
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-purple-400/30">
+              <BsFillJournalBookmarkFill size={20} className='text-white' />
+            </div>
+          }
+          gradient='from-purple-500 to-purple-700'
           delay='100'
         />
         <StatCard
           title='Current Semester'
           value={student.semester}
-          icon={<FaCalendarAlt size={24} />}
-          gradient='from-pink-400 to-pink-600'
+          icon={
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-pink-400/30">
+              <FaCalendarAlt size={20} className='text-white' />
+            </div>
+          }
+          gradient='from-pink-500 to-pink-700'
           delay='200'
         />
         <StatCard
           title='Active Classes'
           value={student.classes?.length || 0}
-          icon={<MdClass size={24} />}
-          gradient='from-green-400 to-green-600'
+          icon={
+            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-green-400/30">
+              <MdClass size={20} className='text-white' />
+            </div>
+          }
+          gradient='from-green-500 to-green-700'
           delay='300'
         />
       </div>
@@ -298,7 +313,7 @@ const StudentDashboard = () => {
                 >
                   {/* Status Badge */}
                   <div className='flex items-center justify-between mb-4'>
-                    <div className='bg-white bg-opacity-30 backdrop-blur-sm px-4 py-2 rounded-full'>
+                    <div className='bg-blue-700 bg-opacity-30 backdrop-blur-sm px-4 py-2 rounded-full'>
                       <p className='text-sm font-bold flex items-center gap-2'>
                         {record.status}
                         {record.status === 'PRESENT' && <FaCheckCircle size={16} />}
