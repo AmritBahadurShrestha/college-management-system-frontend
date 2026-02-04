@@ -34,8 +34,8 @@ export const sidebarLinks: SidebarLink[] = [
     ],
     roles: ['admin'] // Only admin can see
   },
-  { label: 'Courses', to: '/course', roles: ['admin', 'teacher', 'student'] }, // All can see
+  { label: 'Courses', to: '/course', roles: ['admin', 'teacher'] }, // All can see
   { label: 'Classes', to: '/class', roles: ['admin', 'teacher'] },  // Admin and teacher
-  { label: 'Attendances', to: '/attendance', roles: ['admin', 'teacher', 'student'] }, // All can see
+  { label: 'Attendances', to: '/attendance', roles: ['admin', 'teacher'] }, // All can see
   { label: 'Profile', to: '/profile', roles: ['admin', 'teacher', 'student'] }, // All can see
 ];

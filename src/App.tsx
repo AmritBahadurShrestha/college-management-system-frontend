@@ -1,13 +1,14 @@
 import { Toaster } from 'react-hot-toast'
 import { Route, BrowserRouter as Router, Routes } from 'react-router'
 import './App.css'
-import DashboardLayout from './layouts/dashboard.layout'
-import StudentDashboardLayout from './layouts/student.dashboard.layout'
-import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 import Login from './pages/auth/login'
 import Signup from './pages/auth/signup'
 import AdminDashboard from './pages/dashboard/admin-dashboard'
 import StudentDashboard from './pages/dashboard/student.dashboard'
+import TeacherDashboard from './pages/dashboard/teacher.dashboard'
+import DashboardLayout from './layouts/dashboard.layout'
+import StudentDashboardLayout from './layouts/student.dashboard.layout'
+import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 
 import ChangePasswordPage from './pages/changePassword/changePasswordPage'
 
@@ -36,9 +37,7 @@ import AutoAttendance from './pages/attendance/AutoAttendance'
 
 import ProfilePage from './pages/profilepage'
 
-import TeacherDashboard from './pages/dashboard/teacher.dashboard'
 import PageNotFound from './pages/page-not.found'
-import RoleBasedRedirect from './components/RoleBasedRedirect'
 
 function App() {
 
@@ -50,9 +49,6 @@ function App() {
 
           <Route path = '/login' element = { <Login /> }/>
           <Route path = '/signup' element = { <Signup /> }/>
-
-          {/* Root redirects to role-based dashboard */}
-          <Route path='/' element={<RoleBasedRedirect />} />
 
           <Route path='/' element= { <DashboardLayout /> }>
             <Route path = '/dashboard/admin' element = { <AdminDashboard /> }/>
@@ -102,10 +98,6 @@ function App() {
           <Route path='/' element= { <TeacherDashboardLayout /> }>
             <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
             <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
-              <Route path='/student' element= { <StudentPage /> }/>
-              <Route path='/student/add' element= { <CreateStudent /> }/>
-              <Route path='/student/edit/:id' element= { <UpdateStudent /> }/>
-              <Route path='/student/view/:id' element={<StudentView />} />
 
               <Route path = '/profile' element = { <ProfilePage /> }/>
               <Route path='/attendance' element= { <AutoAttendance /> }/>

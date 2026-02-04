@@ -58,6 +58,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
         queryKey: ['courses'],
     });
 
+    // Query for classes
     const { data: classes, isLoading: classesLoading } = useQuery({
         queryFn: getAllClassesList, // your API function
         queryKey: ['classes'],
@@ -109,7 +110,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
         formData.append('semester', String(semester));
 
         if (Array.isArray(classes)) {
-            classes.forEach((courseId) => formData.append('classes', courseId));
+            classes.forEach((classId) => formData.append('classes', classId));
         }
 
         if (Array.isArray(courses)) {
@@ -216,7 +217,7 @@ const StudentForm: React.FC<IProps> = ({ data: student }) => {
                         multiple
                         required
                     />
-
+                    {/* Classes */}
                     <SelectInput
                         name="classes"
                         id="classes"

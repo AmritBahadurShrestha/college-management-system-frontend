@@ -45,7 +45,7 @@ interface AttendInfo {
   class: string;
   course: string;
   date: string;
-  status: 'PRESENT' | 'ABSENT' | 'LATE';
+  status: 'PRESENT' | 'ABSENT';
   remarks: string;
   createdAt: string;
   updatedAt: string;
@@ -69,10 +69,10 @@ interface StudentData {
     program: string;
     semester: number;
     courses: Course[];
-    classes: Class;
+    classes: Class[];
     isActive: boolean;
   };
-  attendInfo: AttendInfo;
+  attendInfo: AttendInfo | AttendInfo[];
 }
 
 interface ApiResponse {
@@ -97,6 +97,22 @@ const StudentDashboard = () => {
 
   const student = response?.data?.student;
   const attendInfo = response?.data?.attendInfo;
+
+  // Convert attendInfo to array if it's not already and add debugging
+  const attendanceRecords = Array.isArray(attendInfo) ? attendInfo : (attendInfo ? [attendInfo] : []);
+  
+  // Debug logging
+  console.log("Raw attendInfo:", attendInfo);
+  console.log("Processed attendanceRecords:", attendanceRecords);
+  console.log("Number of records:", attendanceRecords.length);
+  attendanceRecords.forEach((record, index) => {
+    console.log(`Record ${index}:`, {
+      status: record.status,
+      course: record.course,
+      class: record.class,
+      date: record.date
+    });
+  });
 
   if (isLoading) {
     return (
@@ -137,16 +153,32 @@ const StudentDashboard = () => {
   };
 
   const getAttendanceStatusColor = (status: string) => {
-    switch (status) {
-      case 'PRESENT':
-        return 'from-green-400 to-green-600';
-      case 'ABSENT':
-        return 'from-red-400 to-red-600';
-      case 'LATE':
-        return 'from-yellow-400 to-yellow-600';
-      default:
-        return 'from-gray-400 to-gray-600';
+    // Normalize the status to uppercase and trim whitespace
+    const normalizedStatus = status?.toUpperCase().trim();
+    
+    console.log("Getting color for status:", normalizedStatus);
+    
+    if (normalizedStatus === 'PRESENT') {
+      return 'from-green-400 to-green-600';
+    } else if (normalizedStatus === 'ABSENT') {
+      return 'from-red-400 to-red-600';
+    } else {
+      console.warn("Unknown status:", status);
+      return 'from-gray-400 to-gray-600';
     }
+  };
+
+  // Get course and class details for attendance record
+  const getCourseDetails = (courseId: string) => {
+    const course = student.courses.find(c => c._id === courseId);
+    console.log("Finding course for ID:", courseId, "Found:", course);
+    return course;
+  };
+
+  const getClassDetails = (classId: string) => {
+    const classInfo = student.classes?.find(c => c._id === classId);
+    console.log("Finding class for ID:", classId, "Found:", classInfo);
+    return classInfo;
   };
 
   return (
@@ -230,55 +262,104 @@ const StudentDashboard = () => {
           delay='200'
         />
         <StatCard
-          title='Active Class'
-          value={student.classes ? 1 : 0}
+          title='Active Classes'
+          value={student.classes?.length || 0}
           icon={<MdClass size={24} />}
           gradient='from-green-400 to-green-600'
           delay='300'
         />
       </div>
 
-      {/* Attendance Section */}
-      {attendInfo && (
+      {/* Attendance Section - Updated to show multiple records */}
+      {attendanceRecords.length > 0 ? (
         <div className='bg-white rounded-2xl shadow-lg p-6 mb-8 transform transition-all duration-300 hover:shadow-2xl'>
           <h3 className='text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2'>
             <FaCheckCircle className='text-green-600' size={28} />
-            Today's Attendance
+            Today's Attendance ({attendanceRecords.length} {attendanceRecords.length === 1 ? 'record' : 'records'})
           </h3>
-          <div className={`bg-gradient-to-r ${getAttendanceStatusColor(attendInfo.status)} rounded-xl p-6 text-white`}>
-            <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
-              <div>
-                <p className='text-white text-opacity-90 text-sm mb-1'>Status</p>
-                <p className='text-2xl font-bold flex items-center gap-2'>
-                  {attendInfo.status}
-                  {attendInfo.status === 'PRESENT' && <FaCheckCircle size={20} />}
+          
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+            {attendanceRecords.map((record, index) => {
+              const course = getCourseDetails(record.course);
+              const classInfo = getClassDetails(record.class);
+              const statusColor = getAttendanceStatusColor(record.status);
+              
+              console.log(`Rendering record ${index}:`, {
+                status: record.status,
+                color: statusColor,
+                course: course?.name,
+                class: classInfo?.name
+              });
+              
+              return (
+                <div 
+                  key={record._id || index}
+                  className={`bg-gradient-to-r ${statusColor} rounded-xl p-5 text-white transform transition-all duration-300 hover:scale-[1.02]`}
+                >
+                  {/* Status Badge */}
+                  <div className='flex items-center justify-between mb-4'>
+                    <div className='bg-white bg-opacity-30 backdrop-blur-sm px-4 py-2 rounded-full'>
+                      <p className='text-sm font-bold flex items-center gap-2'>
+                        {record.status}
+                        {record.status === 'PRESENT' && <FaCheckCircle size={16} />}
+                      </p>
+                    </div>
+                    <div className='text-sm text-white text-opacity-90 flex items-center gap-1'>
+                      <AiOutlineCalendar size={16} />
+                      {formatDate(record.date)}
+                    </div>
+                  </div>
+
+                  {/* Course Info */}
+                  <div className='mb-3'>
+                    <p className='text-white text-opacity-80 text-xs mb-1'>Course</p>
+                    <p className='text-lg font-bold'>{course?.code || 'N/A'} - {course?.name || 'Unknown Course'}</p>
+                    <p className='text-sm text-white text-opacity-90'>{course?.department || ''}</p>
+                  </div>
+
+                  {/* Class Info */}
+                  <div className='mb-3'>
+                    <p className='text-white text-opacity-80 text-xs mb-1'>Class</p>
+                    <p className='text-base font-semibold'>{classInfo?.name || 'N/A'}</p>
+                  </div>
+
+                  {/* Remarks */}
+                  {record.remarks && (
+                    <div className='mt-4 pt-4 border-t border-white border-opacity-30'>
+                      <p className='text-white text-opacity-80 text-xs mb-1'>Remarks</p>
+                      <p className='text-sm'>{record.remarks}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Attendance Summary */}
+          <div className='mt-6 pt-6 border-t border-gray-200'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div className='text-center p-4 bg-green-50 rounded-lg'>
+                <p className='text-3xl font-bold text-green-600'>
+                  {attendanceRecords.filter(r => r.status?.toUpperCase() === 'PRESENT').length}
                 </p>
+                <p className='text-sm text-gray-600 mt-1'>Present</p>
               </div>
-              <div>
-                <p className='text-white text-opacity-90 text-sm mb-1'>Date</p>
-                <p className='text-lg font-semibold flex items-center gap-2'>
-                  <AiOutlineCalendar size={18} />
-                  {formatDate(attendInfo.date)}
+              <div className='text-center p-4 bg-red-50 rounded-lg'>
+                <p className='text-3xl font-bold text-red-600'>
+                  {attendanceRecords.filter(r => r.status?.toUpperCase() === 'ABSENT').length}
                 </p>
-              </div>
-              <div>
-                <p className='text-white text-opacity-90 text-sm mb-1'>Class</p>
-                <p className='text-lg font-semibold'>{student.classes?.name || 'N/A'}</p>
-              </div>
-              <div>
-                <p className='text-white text-opacity-90 text-sm mb-1'>Course</p>
-                <p className='text-lg font-semibold'>
-                  {student.courses.find(c => c._id === attendInfo.course)?.code || 'N/A'}
-                </p>
+                <p className='text-sm text-gray-600 mt-1'>Absent</p>
               </div>
             </div>
-            {attendInfo.remarks && (
-              <div className='mt-4 pt-4 border-t border-white border-opacity-30'>
-                <p className='text-white text-opacity-90 text-sm mb-1'>Remarks</p>
-                <p className='text-base'>{attendInfo.remarks}</p>
-              </div>
-            )}
           </div>
+        </div>
+      ) : (
+        <div className='bg-white rounded-2xl shadow-lg p-6 mb-8'>
+          <h3 className='text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
+            <FaCheckCircle className='text-gray-400' size={28} />
+            Today's Attendance
+          </h3>
+          <p className='text-gray-500 text-center py-8'>No attendance records found for today.</p>
         </div>
       )}
 
@@ -296,27 +377,34 @@ const StudentDashboard = () => {
       </div>
 
       {/* Class Section */}
-      {student.classes && (
+      {student.classes && student.classes.length > 0 && (
         <div className='bg-white rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-2xl'>
           <h3 className='text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2'>
             <FaUserGraduate className='text-purple-600' size={28} />
-            Current Class
+            Current {student.classes.length > 1 ? 'Classes' : 'Class'}
           </h3>
-          <div className='bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border-l-4 border-purple-500 hover:border-pink-500 transition-all duration-300'>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-              <div>
-                <p className='text-gray-600 text-sm mb-1'>Class Name</p>
-                <p className='text-xl font-bold text-gray-800'>{student.classes.name}</p>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {student.classes.map((cls) => (
+              <div 
+                key={cls._id}
+                className='bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border-l-4 border-purple-500 hover:border-pink-500 transition-all duration-300'
+              >
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                  <div>
+                    <p className='text-gray-600 text-sm mb-1'>Class Name</p>
+                    <p className='text-xl font-bold text-gray-800'>{cls.name}</p>
+                  </div>
+                  <div>
+                    <p className='text-gray-600 text-sm mb-1'>Program</p>
+                    <p className='text-xl font-bold text-gray-800'>{cls.program}</p>
+                  </div>
+                  <div>
+                    <p className='text-gray-600 text-sm mb-1'>Semester</p>
+                    <p className='text-xl font-bold text-gray-800'>{cls.semester}</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className='text-gray-600 text-sm mb-1'>Program</p>
-                <p className='text-xl font-bold text-gray-800'>{student.classes.program}</p>
-              </div>
-              <div>
-                <p className='text-gray-600 text-sm mb-1'>Semester</p>
-                <p className='text-xl font-bold text-gray-800'>{student.classes.semester}</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       )}

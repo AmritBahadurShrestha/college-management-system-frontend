@@ -120,6 +120,10 @@ console.log({data})
       header: () => <span>Courses</span>,
       cell: (info) => <span>{ info.getValue()?.map((course: any) => course.name).join(', ') || '-' }</span>,
     }),
+    // columnHelper.accessor('classes', {
+    //   header: () => <span>Classes</span>,
+    //   cell: (info) => <span>{ info.getValue()?.map((cls: any) => cls.name).join(', ') || '-' }</span>,
+    // }),
     columnHelper.accessor('createdAt', {
       header: () => <span>Created At</span>,
       cell: info => <span>{new Intl.DateTimeFormat('en-us', {
