@@ -126,9 +126,6 @@ function App() {
             <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
             <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
 
-            {/* Attendance */}
-            <Route path='/attendance' element= { <AutoAttendance /> }/>
-
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
