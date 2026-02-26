@@ -2,10 +2,13 @@ import StudentList from '../../components/student/list';
 import PageHeader from '../../components/header/page-header';
 import SearchInput from './SearchInput';
 import { useEffect, useState } from 'react';
+import { useAuth } from "../../context/auth.context";
+import { Role } from "../../types/enum";
 
 const StudentPage = () => {
   const [tempInputValue, setTempInputValue] = useState('')
   const [inputValue, setInputValue] = useState('')
+  const { user } = useAuth()
 
   useEffect(()=>{
     const interval = setTimeout(()=>{
@@ -25,7 +28,7 @@ const StudentPage = () => {
         key='list-student'
         title='Student List'
         sub_title='All Students'
-        button_text='Add Student'
+        {...(user?.role === Role.ADMIN && { button_text: 'Add Student' })}
         link_to='/student/add'
       />
       
