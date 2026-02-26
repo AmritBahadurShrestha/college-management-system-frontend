@@ -55,6 +55,8 @@ function App() {
           // Shared Admin, Student and Teacher
           <Route path='/' element= { <LoginDashboardLayout /> }> 
 
+            <Route path='/change-password' element= { <ChangePasswordPage /> }/>
+
             <Route path = '/profile' element = { <ProfilePage /> }/>
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
@@ -116,7 +118,6 @@ function App() {
           // Student
           <Route path='/' element= { <StudentDashboardLayout /> }>
             <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
-            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
@@ -124,7 +125,6 @@ function App() {
           // Teacher
           <Route path='/' element= { <TeacherDashboardLayout /> }>
             <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
-            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
