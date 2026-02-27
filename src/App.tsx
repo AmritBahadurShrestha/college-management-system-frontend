@@ -9,6 +9,7 @@ import TeacherDashboard from './pages/dashboard/teacher.dashboard'
 import DashboardLayout from './layouts/dashboard.layout'
 import LoginDashboardLayout from './layouts/login.dashboard.layout'
 import ATDashboardLayout from './layouts/teacher.admin.dashboard.layout'
+import STDashboardLayout from './layouts/teacher.student.dashboard.layout'
 import StudentDashboardLayout from './layouts/student.dashboard.layout'
 import TeacherDashboardLayout from './layouts/teacher.dashboard.layout'
 
@@ -40,6 +41,7 @@ import AutoAttendance from './pages/attendance/AutoAttendance'
 import ProfilePage from './pages/profilepage'
 
 import PageNotFound from './pages/page-not.found'
+import ReportGenerate from './pages/report/report.generate'
 
 function App() {
 
@@ -61,7 +63,13 @@ function App() {
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
-          // Shared Admin and Teacher
+          // Shared StudentDashboard and Teacher
+          <Route path='/' element= { <STDashboardLayout /> }> 
+            <Route path='/report' element= { <ReportGenerate /> }/>
+            <Route path = '*' element = { <PageNotFound /> }/>
+          </Route>
+
+
           <Route path='/' element= { <ATDashboardLayout /> }> 
 
              {/* Student */}
