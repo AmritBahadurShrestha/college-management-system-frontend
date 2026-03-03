@@ -1,5 +1,5 @@
-import api from "./";
 import type { IClassData } from "../types/class.types";
+import api from "./";
 
 // Create a class
 export const postClass = async (data: IClassData) => {
@@ -34,6 +34,28 @@ export const getAllClasses = async (
 export const getAllClassesList = async () => {
   try {
     const response = await api.get("/class/all");
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+// Get all students based on the class 
+export const getStuOnClass = async (className: any) => {
+  try {
+    const response = await api.get(`/class/getStuClass/${className}`);
+    // console.log("info => ", response?.data?.data)
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+// Get all teacher based on the class 
+export const getTeaOnClass = async (className: any) => {
+  try {
+    const response = await api.get(`/class/getTeaClass/${className}`);
+    // console.log("info => ", response?.data?.data)
     return response.data;
   } catch (error: any) {
     throw error.response.data;

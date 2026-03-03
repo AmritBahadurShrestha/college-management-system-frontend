@@ -1,21 +1,24 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createColumnHelper } from "@tanstack/react-table";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Table from "../common/table/table";
-import { createColumnHelper } from "@tanstack/react-table";
-import ConfirmationModal from "../modal/confirmation.modal";
-import ActionButtons from "../common/table/extra-action-button";
+import { getStuOnClass } from "../../api/class.api";
 import { deleteStudent, getAllStudents } from "../../api/student.api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import TableSkeleton from "../../skeleton/LoadingSkeleton";
 import { useAuth } from "../../context/auth.context";
+import TableSkeleton from "../../skeleton/LoadingSkeleton";
 import { Role } from "../../types/enum";
+import ActionButtons from "../common/table/extra-action-button";
+import Table from "../common/table/table";
+import ConfirmationModal from "../modal/confirmation.modal";
 
 interface IProps {
   inputValue: string;
   selectedProgram: string;
   selectedSemester: string;
+  selectedClass: string; // ✅ Added missing prop type 
 }
-const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSemester }) => {
+
+const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSemester, selectedClass }) => {
   const [page, setPage] = useState(1);
   const perPage = 5;
 
@@ -26,12 +29,19 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["get_all_students", page, inputValue, selectedProgram, selectedSemester],
-    queryFn: () => getAllStudents(page, perPage, {
-      query: inputValue,
-      ...(selectedProgram && { program: selectedProgram }),
-      ...(selectedSemester && { semester: selectedSemester }),
-    }),
+    queryKey: ["get_all_students", page, inputValue, selectedProgram, selectedSemester, selectedClass],
+    queryFn: () => { 
+      // ✅ When a class is selected, call getStuOnClass instead of getAllStudents
+      if (selectedClass) {
+        return getStuOnClass(selectedClass);
+      }
+      // Otherwise fetch all students with the active filters
+      return getAllStudents(page, perPage, {
+        query: inputValue,
+        ...(selectedProgram && { program: selectedProgram }),
+        ...(selectedSemester && { semester: selectedSemester }),
+      });
+    },
   });
 
   // Delete Mutation
@@ -76,26 +86,6 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
       header: () => <span>Full Name</span>,
       cell: (info) => info.getValue(),
     }),
-    // columnHelper.accessor('email', {
-    //   header: () => <span>Email</span>,
-    //   cell: info => info.getValue(),
-    // }),
-    // columnHelper.accessor('phone', {
-    //   header: () => <span>Phone No.</span>,
-    //   cell: info => info.getValue(),
-    // }),
-    // columnHelper.accessor('address', {
-    //   header: () => <span>Address</span>,
-    //   cell: info => info.getValue(),
-    // }),
-    // columnHelper.accessor('dob', {
-    //   header: () => <span>DOB</span>,
-    //   cell: info => {
-    //     const date = new Date(info.getValue());
-    //     const formatted = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-    //     return formatted;
-    //   },
-    // }),
     columnHelper.accessor("gender", {
       header: () => <span>Gender</span>,
       cell: (info) => info.getValue(),
@@ -104,10 +94,6 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
       header: () => <span>Roll No.</span>,
       cell: (info) => info.getValue(),
     }),
-    // columnHelper.accessor('registrationNumber', {
-    //   header: () => <span>Reg No.</span>,
-    //   cell: info => info.getValue(),
-    // }),
     columnHelper.accessor("program", {
       header: () => <span>Program</span>,
       cell: (info) => info.getValue(),
@@ -127,10 +113,6 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
         </span>
       ),
     }),
-    // columnHelper.accessor('classes', {
-    //   header: () => <span>Classes</span>,
-    //   cell: (info) => <span>{ info.getValue()?.map((cls: any) => cls.name).join(', ') || '-' }</span>,
-    // }),
     columnHelper.accessor("createdAt", {
       header: () => <span>Created At</span>,
       cell: (info) => (
@@ -180,7 +162,6 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        {/* <p className='text-gray-600 animate-pulse'>Loading Students...</p> */}
         <TableSkeleton />
       </div>
     );
@@ -203,7 +184,7 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
           <Table
             columns={columns}
             data={data?.data}
-            pagination={data?.pagination} // send pagination from backend
+            pagination={data?.pagination}
             onPageChange={setPage}
           />
         </div>
