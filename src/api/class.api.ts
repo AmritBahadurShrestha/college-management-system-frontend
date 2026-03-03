@@ -41,10 +41,15 @@ export const getAllClassesList = async () => {
 };
 
 // Get all students based on the class 
-export const getStuOnClass = async (className: any) => {
+export const getStuOnClass = async (
+  className: any,
+  page: number,
+  perPage: number,
+) => {
   try {
-    const response = await api.get(`/class/getStuClass/${className}`);
-    // console.log("info => ", response?.data?.data)
+    const response = await api.get(
+      `/class/getStuClass/${className}?current_page=${page}&per_page=${perPage}`
+    );
     return response.data;
   } catch (error: any) {
     throw error.response.data;
@@ -52,10 +57,15 @@ export const getStuOnClass = async (className: any) => {
 };
 
 // Get all teacher based on the class 
-export const getTeaOnClass = async (className: any) => {
+export const getTeaOnClass = async (
+  className: any,
+  page: number,
+  perPage: number,
+) => {
   try {
-    const response = await api.get(`/class/getTeaClass/${className}`);
-    // console.log("info => ", response?.data?.data)
+    const response = await api.get(
+      `/class/getTeaClass/${className}?current_page=${page}&per_page=${perPage}`
+    );
     return response.data;
   } catch (error: any) {
     throw error.response.data;

@@ -33,7 +33,7 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
     queryFn: () => { 
       // ✅ When a class is selected, call getStuOnClass instead of getAllStudents
       if (selectedClass) {
-        return getStuOnClass(selectedClass);
+        return getStuOnClass(selectedClass, page, perPage);
       }
       // Otherwise fetch all students with the active filters
       return getAllStudents(page, perPage, {

@@ -30,7 +30,7 @@ const TeacherList: React.FC<IProps> = ({ inputValue, selectedDepartment, selecte
     queryFn: () => {
       // ✅ When a class is selected, call class-specific API
       if (selectedClass) {
-        return getTeaOnClass(selectedClass);
+        return getTeaOnClass(selectedClass, page, perPage);
       }
       // Otherwise fetch all teachers with active filters
       return getAllTeachers(page, perPage, {
