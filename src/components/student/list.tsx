@@ -15,7 +15,7 @@ interface IProps {
   inputValue: string;
   selectedProgram: string;
   selectedSemester: string;
-  selectedClass: string; // ✅ Added missing prop type 
+  selectedClass: string;
 }
 
 const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSemester, selectedClass }) => {
@@ -31,7 +31,7 @@ const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSe
   const { data, isLoading } = useQuery({
     queryKey: ["get_all_students", page, inputValue, selectedProgram, selectedSemester, selectedClass],
     queryFn: () => { 
-      // ✅ When a class is selected, call getStuOnClass instead of getAllStudents
+      // When a class is selected, call getStuOnClass instead of getAllStudents
       if (selectedClass) {
         return getStuOnClass(selectedClass, page, perPage);
       }

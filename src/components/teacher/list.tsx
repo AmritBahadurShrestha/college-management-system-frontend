@@ -26,9 +26,9 @@ const TeacherList: React.FC<IProps> = ({ inputValue, selectedDepartment, selecte
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['get_all_teachers', page, inputValue, selectedDepartment, selectedClass], // ✅ selectedClass in key
+    queryKey: ['get_all_teachers', page, inputValue, selectedDepartment, selectedClass],
     queryFn: () => {
-      // ✅ When a class is selected, call class-specific API
+      // When a class is selected, call class-specific API
       if (selectedClass) {
         return getTeaOnClass(selectedClass, page, perPage);
       }
