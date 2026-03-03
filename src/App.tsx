@@ -42,6 +42,7 @@ import ProfilePage from './pages/profilepage'
 
 import PageNotFound from './pages/page-not.found'
 import ReportGenerate from './pages/report/report.generate'
+import ForgotPassword from './pages/auth/forgot-password'
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
 
           <Route path = '/login' element = { <Login /> }/>
           <Route path = '/signup' element = { <Signup /> }/>
+          <Route path = '/forgot-password' element = { <ForgotPassword /> }/>
 
           // Shared Admin, Student and Teacher
           <Route path='/' element= { <LoginDashboardLayout /> }> 
@@ -127,6 +129,7 @@ function App() {
           <Route path='/' element= { <StudentDashboardLayout /> }>
             <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
 
+            <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
@@ -134,6 +137,7 @@ function App() {
           <Route path='/' element= { <TeacherDashboardLayout /> }>
             <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
 
+            <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 

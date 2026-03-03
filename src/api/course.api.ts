@@ -63,6 +63,21 @@ export const updateCourse = async ({
   }
 };
 
+// Get courses by program and semester
+export const getCoursesByProgramSemester = async (
+  program: string,
+  semester: number,
+) => {
+  try {
+    const response = await api.get(
+      `/course/by-program-semester?program=${encodeURIComponent(program)}&semester=${semester}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
 // Delete a course
 export const deleteCourse = async (id: string) => {
   try {

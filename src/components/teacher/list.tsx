@@ -6,12 +6,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 import ConfirmationModal from '../modal/confirmation.modal';
 import { deleteTeacher, getAllTeachers } from '../../api/teacher.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import TableSkeleton from '../../skeleton/LoadingSkeleton';
 
 interface IProps{
   inputValue:string
+  selectedDepartment: string
 }
 
-const TeacherList:React.FC<IProps> = ({inputValue}) => {
+const TeacherList:React.FC<IProps> = ({inputValue, selectedDepartment}) => {
 
   const [page, setPage] = useState(1)
   const perPage = 5
@@ -22,11 +24,12 @@ const TeacherList:React.FC<IProps> = ({inputValue}) => {
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-      queryFn: () => getAllTeachers(page, perPage, {query:inputValue}),
-      queryKey: ['get_all_teachers', page, inputValue]
+      queryFn: () => getAllTeachers(page, perPage, {
+        query: inputValue,
+        ...(selectedDepartment && { department: selectedDepartment }),
+      }),
+      queryKey: ['get_all_teachers', page, inputValue, selectedDepartment]
   })
-
-  console.log({data})
 
   // Delete Mutation
   const { mutate, isPending } = useMutation({
@@ -123,7 +126,7 @@ const TeacherList:React.FC<IProps> = ({inputValue}) => {
   if (isLoading) {
     return (
       <div className='flex justify-center items-center h-64'>
-        <p className='text-gray-600 animate-pulse'>Loading Teachers...</p>
+        <TableSkeleton />
       </div>
     )
   }

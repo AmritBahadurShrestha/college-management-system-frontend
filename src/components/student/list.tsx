@@ -12,8 +12,10 @@ import { Role } from "../../types/enum";
 
 interface IProps {
   inputValue: string;
+  selectedProgram: string;
+  selectedSemester: string;
 }
-const StudentList: React.FC<IProps> = ({ inputValue }) => {
+const StudentList: React.FC<IProps> = ({ inputValue, selectedProgram, selectedSemester }) => {
   const [page, setPage] = useState(1);
   const perPage = 5;
 
@@ -24,11 +26,13 @@ const StudentList: React.FC<IProps> = ({ inputValue }) => {
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["get_all_students", page, inputValue],
-    queryFn: () => getAllStudents(page, perPage, { query: inputValue }),
+    queryKey: ["get_all_students", page, inputValue, selectedProgram, selectedSemester],
+    queryFn: () => getAllStudents(page, perPage, {
+      query: inputValue,
+      ...(selectedProgram && { program: selectedProgram }),
+      ...(selectedSemester && { semester: selectedSemester }),
+    }),
   });
-
-  console.log({ data });
 
   // Delete Mutation
   const { mutate, isPending } = useMutation({

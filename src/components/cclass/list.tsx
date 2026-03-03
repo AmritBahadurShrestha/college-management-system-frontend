@@ -63,21 +63,6 @@ const ClassList: React.FC<IProps> = ({ inputValue }) => {
       header: () => <span>Semester</span>,
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("teacher.fullName", {
-      header: () => <span>Teacher</span>,
-      cell: (info) => <span>{info.getValue() ?? "-"}</span>,
-    }),
-    columnHelper.accessor("students", {
-      header: () => <span>Students</span>,
-      cell: (info) => (
-        <span>
-          {info
-            .getValue()
-            ?.map((student: any) => student.name || student.fullName)
-            .join(", ") || "-"}
-        </span>
-      ),
-    }),
     columnHelper.accessor("courses", {
       header: () => <span>Courses</span>,
       cell: (info) => (

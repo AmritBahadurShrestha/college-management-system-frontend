@@ -19,7 +19,7 @@ export const postStudent = async (data: FormData) => {
 export const getAllStudents = async (
   page: number,
   perPage: number,
-  params?: { query: string },
+  params?: { query: string; program?: string; semester?: string },
 ) => {
   try {
     const response = await api.get(
@@ -100,6 +100,26 @@ export const deleteStudent = async (id: string) => {
   }
 };
 
+// Get next auto-increment roll number
+export const getNextRollNumber = async () => {
+  try {
+    const response = await api.get("/student/next-roll-number");
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};
+
+// Get next auto-increment registration number
+export const getNextRegistrationNumber = async () => {
+  try {
+    const response = await api.get("/student/next-registration-number");
+    return response.data;
+  } catch (error: any) {
+    throw error.response?.data || error;
+  }
+};
+
 // Get Students in Chart
 export const getStudents = async (): Promise<IStudentData[]> => {
   try {
@@ -127,7 +147,6 @@ export const getAllStudentFilter = async (
   data: any,
 ) => {
   try {
-    console.log("data : ", data);
     const response = await api.post(
       `/student/filter?current_page=${page}&per_page=${perPage}`,
       data,

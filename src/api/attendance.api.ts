@@ -61,3 +61,13 @@ export const deleteAttendance = async (id: string) => {
     throw error.response.data;
   }
 };
+
+// Get attendance by student ID
+export const getAttendanceByStudentId = async (studentId: string) => {
+  try {
+    const response = await api.get(`/attendance/student/${studentId}`);
+    return response.data;
+  } catch (error: any) {
+    throw error.response.data;
+  }
+};

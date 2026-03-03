@@ -87,9 +87,7 @@ const StudentDashboard = () => {
   const { data: response, isLoading } = useQuery<ApiResponse>({
     queryFn: async () => {
       const userId: string = String(user?.email);
-      console.log("useAuth => ", userId);
       const data = await getStudentByEmail(userId);
-      console.log("data => ", data);
       return data;
     },
     queryKey: ['student-dashboard'],
@@ -98,21 +96,7 @@ const StudentDashboard = () => {
   const student = response?.data?.student;
   const attendInfo = response?.data?.attendInfo;
 
-  // Convert attendInfo to array if it's not already and add debugging
   const attendanceRecords = Array.isArray(attendInfo) ? attendInfo : (attendInfo ? [attendInfo] : []);
-  
-  // Debug logging
-  console.log("Raw attendInfo:", attendInfo);
-  console.log("Processed attendanceRecords:", attendanceRecords);
-  console.log("Number of records:", attendanceRecords.length);
-  attendanceRecords.forEach((record, index) => {
-    console.log(`Record ${index}:`, {
-      status: record.status,
-      course: record.course,
-      class: record.class,
-      date: record.date
-    });
-  });
 
   if (isLoading) {
     return (
@@ -153,32 +137,22 @@ const StudentDashboard = () => {
   };
 
   const getAttendanceStatusColor = (status: string) => {
-    // Normalize the status to uppercase and trim whitespace
     const normalizedStatus = status?.toUpperCase().trim();
-    
-    console.log("Getting color for status:", normalizedStatus);
-    
     if (normalizedStatus === 'PRESENT') {
       return 'from-green-400 to-green-600';
     } else if (normalizedStatus === 'ABSENT') {
       return 'from-red-400 to-red-600';
     } else {
-      console.warn("Unknown status:", status);
       return 'from-gray-400 to-gray-600';
     }
   };
 
-  // Get course and class details for attendance record
   const getCourseDetails = (courseId: string) => {
-    const course = student.courses.find(c => c._id === courseId);
-    console.log("Finding course for ID:", courseId, "Found:", course);
-    return course;
+    return student.courses.find(c => c._id === courseId);
   };
 
   const getClassDetails = (classId: string) => {
-    const classInfo = student.classes?.find(c => c._id === classId);
-    console.log("Finding class for ID:", classId, "Found:", classInfo);
-    return classInfo;
+    return student.classes?.find(c => c._id === classId);
   };
 
   return (
@@ -298,13 +272,6 @@ const StudentDashboard = () => {
               const course = getCourseDetails(record.course);
               const classInfo = getClassDetails(record.class);
               const statusColor = getAttendanceStatusColor(record.status);
-              
-              console.log(`Rendering record ${index}:`, {
-                status: record.status,
-                color: statusColor,
-                course: course?.name,
-                class: classInfo?.name
-              });
               
               return (
                 <div 

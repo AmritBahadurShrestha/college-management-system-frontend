@@ -18,7 +18,7 @@ export const postTeacher = async (data: FormData) => {
 export const getAllTeachers = async (
   page: number,
   perPage: number,
-  params?: { query: string },
+  params?: { query: string; department?: string },
 ) => {
   try {
     const response = await api.get(

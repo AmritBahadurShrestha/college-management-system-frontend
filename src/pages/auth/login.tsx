@@ -23,6 +23,16 @@ const Login = () => {
         {/* LogIn Form */}
         <LoginForm />
 
+        {/* Forgot Password */}
+        <div className='mt-4 text-right'>
+          <Link
+            to='/forgot-password'
+            className='text-sm text-violet-600 hover:text-violet-800 font-medium hover:underline transition-colors duration-200'
+          >
+            Forgot Password?
+          </Link>
+        </div>
+
         {/* Divider */}
         <div className='my-6 flex items-center'>
           <hr className='flex-grow border-gray-300' />

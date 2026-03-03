@@ -3,11 +3,13 @@ import PageHeader from '../../components/header/page-header';
 import SearchInput from './SearchInput';
 import { useEffect, useState } from 'react';
 import { useAuth } from "../../context/auth.context";
-import { Role } from "../../types/enum";
+import { Role, PROGRAMS, SEMESTER_OPTIONS } from "../../types/enum";
 
 const StudentPage = () => {
   const [tempInputValue, setTempInputValue] = useState('')
   const [inputValue, setInputValue] = useState('')
+  const [selectedProgram, setSelectedProgram] = useState('')
+  const [selectedSemester, setSelectedSemester] = useState('')
   const { user } = useAuth()
 
   useEffect(()=>{
@@ -17,8 +19,6 @@ const StudentPage = () => {
 
     return()=> clearTimeout(interval)
   },[tempInputValue])
-
-  console.log({inputValue})
 
   return (
     <main className='min-h-screen w-full p-0 flex flex-col gap-2'>
@@ -32,11 +32,34 @@ const StudentPage = () => {
         link_to='/student/add'
       />
       
-      {/* search inputField */}
-      <SearchInput 
-      tempInputValue={tempInputValue}
-      setTempInputValue={setTempInputValue}
-      placeholder='Search students' id='search'/>
+      {/* Filters */}
+      <div className='flex flex-wrap items-center gap-3'>
+        <SearchInput 
+          tempInputValue={tempInputValue}
+          setTempInputValue={setTempInputValue}
+          placeholder='Search students' id='search'
+        />
+        <select
+          value={selectedProgram}
+          onChange={(e) => setSelectedProgram(e.target.value)}
+          className='w-full sm:w-auto px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200'
+        >
+          <option value=''>All Programs</option>
+          {PROGRAMS.map((p) => (
+            <option key={p.value} value={p.value}>{p.label}</option>
+          ))}
+        </select>
+        <select
+          value={selectedSemester}
+          onChange={(e) => setSelectedSemester(e.target.value)}
+          className='w-full sm:w-auto px-4 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200'
+        >
+          <option value=''>All Semesters</option>
+          {SEMESTER_OPTIONS.map((s) => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Main content */}
       <div className='mx-auto w-full sm:px-0 lg:px-0'>
@@ -50,7 +73,7 @@ const StudentPage = () => {
           {/* Horizontal line */}
           <hr className='border-t-2 border-gray-300 mb-4 w-full mx-auto' />
 
-          <StudentList inputValue={inputValue}/>
+          <StudentList inputValue={inputValue} selectedProgram={selectedProgram} selectedSemester={selectedSemester}/>
 
         </div>
       </div>

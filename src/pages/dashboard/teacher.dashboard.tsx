@@ -58,9 +58,7 @@ const TeacherDashboard = () => {
   const { data: response, isLoading } = useQuery<ApiResponse>({
     queryFn: async () => {
       const userId: string = String(user?.email);
-      console.log("useAuth => ", userId);
       const data = await getTeacherByEmail(userId);
-      console.log("data => ", data);
       return data;
     },
     queryKey: ['teacher-dashboard'],

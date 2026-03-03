@@ -31,7 +31,7 @@ const ATDashboardLayout = () => {
         <Header toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <main className='mt-16 p-6 flex-1 overflow-auto bg-gray-400'>
+        <main className='mt-16 p-6 flex-1 overflow-auto bg-gradient-to-br from-gray-100 to-gray-200'>
           <Outlet />
         </main>
       </div>
