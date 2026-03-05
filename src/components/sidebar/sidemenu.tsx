@@ -85,7 +85,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen = false, toggleSidebar }) =>
         <div className='mt-auto flex flex-col items-center py-4'>
           <hr className='w-full border-gray-300 mb-4' />
           <span className='text-gray-950 text-sm'>
-            &copy; 2025 CollegeMS
+            &copy; 2026 CollegeMS
           </span>
         </div>
       </aside>

@@ -414,78 +414,118 @@ export default function StudentReport({ data: _rawData }: { data: StudentReportD
         {tab === 'courses' && (
           <div>
             <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: '1rem', color: '#e6edf3' }}>
-              Enrolled Courses <span style={{ color: COLORS.muted, fontSize: 13, fontWeight: 400 }}>({s.courses.length})</span>
+              Enrolled Courses{' '}
+              <span style={{ color: COLORS.muted, fontSize: 13, fontWeight: 400 }}>
+                ({s.courses?.length ?? 0})
+              </span>
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-              {s.courses.map((c: Course) => (
-                <div key={c._id} style={{
-                  ...section, marginBottom: 0,
-                  borderTop: `3px solid ${COLORS.accent}`,
-                  transition: 'transform .2s',
-                }}
-                  onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-                  onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div>
-                      <div style={{ ...badge(COLORS.accent), marginBottom: 8 }}>{c.code}</div>
-                      <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{c.name}</h3>
-                    </div>
-                    <span style={badge(c.isActive ? COLORS.present : COLORS.absent)}>
-                      {c.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '1rem' }}>
-                    {[
-                      ['Department', c.department],
-                      ['Program', c.program],
-                      ['Semester', `Sem ${c.semester}`],
-                      ['Credit Hours', `${c.creditHours} hrs`],
-                    ].map(([lbl, val]) => (
-                      <div key={lbl} style={{ background: COLORS.bg, borderRadius: 8, padding: '0.5rem 0.75rem' }}>
-                        <div style={{ fontSize: 10, color: COLORS.muted }}>{lbl}</div>
-                        <div style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>{val}</div>
+        
+            {s.courses && s.courses.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+                {s.courses.map((c: Course) => (
+                  <div
+                    key={c._id}
+                    style={{
+                      ...section,
+                      marginBottom: 0,
+                      borderTop: `3px solid ${COLORS.accent}`,
+                      transition: 'transform .2s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-3px)')}
+                    onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <div style={{ ...badge(COLORS.accent), marginBottom: 8 }}>{c.code}</div>
+                        <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>{c.name}</h3>
                       </div>
-                    ))}
+                      <span style={badge(c.isActive ? COLORS.present : COLORS.absent)}>
+                        {c.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                  
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginTop: '1rem' }}>
+                      {[
+                        ['Department', c.department],
+                        ['Program', c.program],
+                        ['Semester', `Sem ${c.semester}`],
+                        ['Credit Hours', `${c.creditHours} hrs`],
+                      ].map(([lbl, val]) => (
+                        <div
+                          key={lbl}
+                          style={{ background: COLORS.bg, borderRadius: 8, padding: '0.5rem 0.75rem' }}
+                        >
+                          <div style={{ fontSize: 10, color: COLORS.muted }}>{lbl}</div>
+                          <div style={{ fontSize: 12, fontWeight: 600, marginTop: 2 }}>{val}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* classes */}
+                ))}
+              </div>
+            ) : (
+              <div style={{ color: COLORS.muted, padding: '1rem' }}>No courses enrolled.</div>
+            )}
+        
+            {/* CLASSES */}
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: '2rem 0 1rem', color: '#e6edf3' }}>
-              Classes <span style={{ color: COLORS.muted, fontSize: 13, fontWeight: 400 }}>({s.classes.length})</span>
+              Classes{' '}
+              <span style={{ color: COLORS.muted, fontSize: 13, fontWeight: 400 }}>
+                ({s.classes?.length ?? 0})
+              </span>
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-              {s.classes.map((cl: ClassItem) => (
-                <div key={cl._id} style={{
-                  ...section, marginBottom: 0,
-                  borderTop: `3px solid ${COLORS.warn}`,
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      background: `${COLORS.warn}20`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: COLORS.warn, fontSize: 18,
-                    }}>
-                      <MdClass />
+          
+            {s.classes && s.classes.length > 0 ? (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+                {s.classes.map((cl: ClassItem) => (
+                  <div
+                    key={cl._id}
+                    style={{
+                      ...section,
+                      marginBottom: 0,
+                      borderTop: `3px solid ${COLORS.warn}`,
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                      <div
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 10,
+                          background: `${COLORS.warn}20`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: COLORS.warn,
+                          fontSize: 18,
+                        }}
+                      >
+                        <MdClass />
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 700 }}>{cl.name}</div>
+                        <div style={{ fontSize: 11, color: COLORS.muted }}>
+                          {cl.program} · Sem {cl.semester}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <div style={{ fontWeight: 700 }}>{cl.name}</div>
-                      <div style={{ fontSize: 11, color: COLORS.muted }}>{cl.program} · Sem {cl.semester}</div>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span style={badge(COLORS.muted)}>
+                        {cl.students?.length ?? 0} student{(cl.students?.length ?? 0) !== 1 ? 's' : ''}
+                      </span>
+                      <span style={badge(COLORS.muted)}>
+                        {cl.courses?.length ?? 0} course{(cl.courses?.length ?? 0) !== 1 ? 's' : ''}
+                      </span>
+                      <span style={badge(cl.isActive ? COLORS.present : COLORS.absent)}>
+                        {cl.isActive ? 'Active' : 'Inactive'}
+                      </span>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    <span style={badge(COLORS.muted)}>{cl.students.length} student{cl.students.length !== 1 ? 's' : ''}</span>
-                    <span style={badge(COLORS.muted)}>{cl.courses.length} course{cl.courses.length !== 1 ? 's' : ''}</span>
-                    <span style={badge(cl.isActive ? COLORS.present : COLORS.absent)}>
-                      {cl.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ color: COLORS.muted, padding: '1rem' }}>No classes assigned.</div>
+            )}
           </div>
         )}
 

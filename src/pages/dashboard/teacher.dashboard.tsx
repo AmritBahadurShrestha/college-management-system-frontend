@@ -153,28 +153,44 @@ const TeacherDashboard = () => {
         <StatCard
           title='Teaching Courses'
           value={teacher.courses.length}
-          icon={<FaBook size={24} />}
+          icon={
+            <div className="w-6 h-6 flex items-center justify-center">
+              <FaBook size={75} className='text-gray-600' />
+            </div>
+          }
           gradient='from-blue-400 to-blue-600'
           delay='0'
         />
         <StatCard
           title='Total Credits'
           value={teacher.courses.reduce((sum, course) => sum + course.creditHours, 0)}
-          icon={<BsFillJournalBookmarkFill size={24} />}
+          icon={
+            <div className="w-6 h-6 flex items-center justify-center">
+              <BsFillJournalBookmarkFill size={75} className='text-gray-600' />
+            </div>
+          }
           gradient='from-purple-400 to-purple-600'
           delay='100'
         />
         <StatCard
           title='Active Courses'
           value={teacher.courses.filter(course => course.isActive).length}
-          icon={<FaChalkboardTeacher size={24} />}
+          icon={
+            <div className="w-6 h-6 flex items-center justify-center">
+              <FaChalkboardTeacher size={75} className='text-gray-600' />
+            </div>
+          }
           gradient='from-pink-400 to-pink-600'
           delay='200'
         />
         <StatCard
           title='Department'
           value={teacher.department}
-          icon={<FaUserTie size={24} />}
+          icon={
+            <div className="w-6 h-6 flex items-center justify-center">
+              <FaUserTie size={75} className='text-gray-600' />
+            </div>
+          }
           gradient='from-green-400 to-green-600'
           delay='300'
           isText

@@ -43,6 +43,10 @@ import ProfilePage from './pages/profilepage'
 import PageNotFound from './pages/page-not.found'
 import ReportGenerate from './pages/report/report.generate'
 import ForgotPassword from './pages/auth/forgot-password'
+import StudentResultPage from './pages/result/StudentResultPage'
+// import TeacherResultPage from './pages/result/TeacherResultPage'
+import ATResultPage from './pages/result/ATResultPage'
+import ClassReportPage from './pages/result/ClassReportPage'
 
 function App() {
 
@@ -71,7 +75,7 @@ function App() {
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
-
+          // Shared Admin, Teacher
           <Route path='/' element= { <ATDashboardLayout /> }> 
 
              {/* Student */}
@@ -85,6 +89,9 @@ function App() {
 
             {/* Attendance */}
             <Route path='/attendance' element= { <AutoAttendance /> }/>
+
+            <Route path="/result" element={<ATResultPage />} />
+            <Route path="/class-report" element={<ClassReportPage />} />
 
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
@@ -122,12 +129,15 @@ function App() {
             {/* <Route path='/attendance/add' element= { <CreateAttendance /> }/> */}
             {/* <Route path='/attendance/edit/:id' element= { <UpdateAttendance /> }/> */}
 
+            {/* <Route path="/result" element={<ResultPage /> }/> */}
+
             <Route path = '*' element = { <PageNotFound /> }/>
           </Route>
 
           // Student
           <Route path='/' element= { <StudentDashboardLayout /> }>
             <Route path = '/dashboard/student' element = { <StudentDashboard /> }/>
+            <Route path = '/result/student' element = { <StudentResultPage /> }/>
 
             <Route path='/student-change-password' element= { <ChangePasswordPage /> }/>
             <Route path = '*' element = { <PageNotFound /> }/>
@@ -136,6 +146,7 @@ function App() {
           // Teacher
           <Route path='/' element= { <TeacherDashboardLayout /> }>
             <Route path = '/dashboard/teacher' element = { <TeacherDashboard /> }/>
+            {/* <Route path = '/result/teacher' element = { <TeacherResultPage /> }/> */}
 
             <Route path='/teacher-change-password' element= { <ChangePasswordPage /> }/>
             <Route path = '*' element = { <PageNotFound /> }/>

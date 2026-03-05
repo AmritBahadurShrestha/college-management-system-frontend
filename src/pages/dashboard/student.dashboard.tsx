@@ -1,24 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { AiOutlineCalendar } from 'react-icons/ai';
+import { FaBook, FaCalendarAlt, FaUserGraduate, FaGraduationCap } from 'react-icons/fa';
 import { BsFillJournalBookmarkFill } from 'react-icons/bs';
-import {
-  FaBook,
-  FaCalendarAlt,
-  FaCheckCircle,
-  FaGraduationCap,
-  FaUserGraduate
-} from 'react-icons/fa';
 import { IoBookSharp } from 'react-icons/io5';
-import {
-  MdCake,
-  MdClass,
-  MdEmail,
-  MdLocationOn,
-  MdNumbers,
-  MdPerson,
-  MdPhone,
-  MdSchool
-} from 'react-icons/md';
+import { MdCake, MdClass, MdEmail, MdLocationOn, MdNumbers, MdPerson, MdPhone, MdSchool } from 'react-icons/md';
 import { getStudentByEmail } from '../../api/student.api';
 import { useAuth } from '../../context/auth.context';
 
@@ -37,18 +21,6 @@ interface Class {
   name: string;
   program: string;
   semester: number;
-}
-
-interface AttendInfo {
-  _id: string;
-  student: string;
-  class: string;
-  course: string;
-  date: string;
-  status: 'PRESENT' | 'ABSENT';
-  remarks: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface StudentData {
@@ -72,7 +44,6 @@ interface StudentData {
     classes: Class[];
     isActive: boolean;
   };
-  attendInfo: AttendInfo | AttendInfo[];
 }
 
 interface ApiResponse {
@@ -94,9 +65,6 @@ const StudentDashboard = () => {
   });
 
   const student = response?.data?.student;
-  const attendInfo = response?.data?.attendInfo;
-
-  const attendanceRecords = Array.isArray(attendInfo) ? attendInfo : (attendInfo ? [attendInfo] : []);
 
   if (isLoading) {
     return (
@@ -117,14 +85,6 @@ const StudentDashboard = () => {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   const calculateAge = (dob: string) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -134,25 +94,6 @@ const StudentDashboard = () => {
       age--;
     }
     return age;
-  };
-
-  const getAttendanceStatusColor = (status: string) => {
-    const normalizedStatus = status?.toUpperCase().trim();
-    if (normalizedStatus === 'PRESENT') {
-      return 'from-green-400 to-green-600';
-    } else if (normalizedStatus === 'ABSENT') {
-      return 'from-red-400 to-red-600';
-    } else {
-      return 'from-gray-400 to-gray-600';
-    }
-  };
-
-  const getCourseDetails = (courseId: string) => {
-    return student.courses.find(c => c._id === courseId);
-  };
-
-  const getClassDetails = (classId: string) => {
-    return student.classes?.find(c => c._id === classId);
   };
 
   return (
@@ -217,8 +158,8 @@ const StudentDashboard = () => {
           title='Enrolled Courses'
           value={student.courses.length}
           icon={
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-indigo-400/30">
-              <FaBook size={20} className='text-white' />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <FaBook size={75} className='text-gray-600' />
             </div>
           }
           gradient='from-indigo-500 to-indigo-700'
@@ -228,8 +169,8 @@ const StudentDashboard = () => {
           title='Total Credits'
           value={student.courses.reduce((sum, course) => sum + course.creditHours, 0)}
           icon={
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-purple-400/30">
-              <BsFillJournalBookmarkFill size={20} className='text-white' />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <BsFillJournalBookmarkFill size={75} className='text-gray-600' />
             </div>
           }
           gradient='from-purple-500 to-purple-700'
@@ -239,8 +180,8 @@ const StudentDashboard = () => {
           title='Current Semester'
           value={student.semester}
           icon={
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-pink-400/30">
-              <FaCalendarAlt size={20} className='text-white' />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <FaCalendarAlt size={75} className='text-gray-600' />
             </div>
           }
           gradient='from-pink-500 to-pink-700'
@@ -250,100 +191,14 @@ const StudentDashboard = () => {
           title='Active Classes'
           value={student.classes?.length || 0}
           icon={
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-black/25 shadow-lg shadow-green-400/30">
-              <MdClass size={20} className='text-white' />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <MdClass size={75} className='text-gray-600' />
             </div>
           }
           gradient='from-green-500 to-green-700'
           delay='300'
         />
       </div>
-
-      {/* Attendance Section - Updated to show multiple records */}
-      {attendanceRecords.length > 0 ? (
-        <div className='bg-white rounded-2xl shadow-lg p-6 mb-8 transform transition-all duration-300 hover:shadow-2xl'>
-          <h3 className='text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2'>
-            <FaCheckCircle className='text-green-600' size={28} />
-            Today's Attendance ({attendanceRecords.length} {attendanceRecords.length === 1 ? 'record' : 'records'})
-          </h3>
-          
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-            {attendanceRecords.map((record, index) => {
-              const course = getCourseDetails(record.course);
-              const classInfo = getClassDetails(record.class);
-              const statusColor = getAttendanceStatusColor(record.status);
-              
-              return (
-                <div 
-                  key={record._id || index}
-                  className={`bg-gradient-to-r ${statusColor} rounded-xl p-5 text-white transform transition-all duration-300 hover:scale-[1.02]`}
-                >
-                  {/* Status Badge */}
-                  <div className='flex items-center justify-between mb-4'>
-                    <div className='bg-blue-700 bg-opacity-30 backdrop-blur-sm px-4 py-2 rounded-full'>
-                      <p className='text-sm font-bold flex items-center gap-2'>
-                        {record.status}
-                        {record.status === 'PRESENT' && <FaCheckCircle size={16} />}
-                      </p>
-                    </div>
-                    <div className='text-sm text-white text-opacity-90 flex items-center gap-1'>
-                      <AiOutlineCalendar size={16} />
-                      {formatDate(record.date)}
-                    </div>
-                  </div>
-
-                  {/* Course Info */}
-                  <div className='mb-3'>
-                    <p className='text-white text-opacity-80 text-xs mb-1'>Course</p>
-                    <p className='text-lg font-bold'>{course?.code || 'N/A'} - {course?.name || 'Unknown Course'}</p>
-                    <p className='text-sm text-white text-opacity-90'>{course?.department || ''}</p>
-                  </div>
-
-                  {/* Class Info */}
-                  <div className='mb-3'>
-                    <p className='text-white text-opacity-80 text-xs mb-1'>Class</p>
-                    <p className='text-base font-semibold'>{classInfo?.name || 'N/A'}</p>
-                  </div>
-
-                  {/* Remarks */}
-                  {record.remarks && (
-                    <div className='mt-4 pt-4 border-t border-white border-opacity-30'>
-                      <p className='text-white text-opacity-80 text-xs mb-1'>Remarks</p>
-                      <p className='text-sm'>{record.remarks}</p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Attendance Summary */}
-          <div className='mt-6 pt-6 border-t border-gray-200'>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-              <div className='text-center p-4 bg-green-50 rounded-lg'>
-                <p className='text-3xl font-bold text-green-600'>
-                  {attendanceRecords.filter(r => r.status?.toUpperCase() === 'PRESENT').length}
-                </p>
-                <p className='text-sm text-gray-600 mt-1'>Present</p>
-              </div>
-              <div className='text-center p-4 bg-red-50 rounded-lg'>
-                <p className='text-3xl font-bold text-red-600'>
-                  {attendanceRecords.filter(r => r.status?.toUpperCase() === 'ABSENT').length}
-                </p>
-                <p className='text-sm text-gray-600 mt-1'>Absent</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className='bg-white rounded-2xl shadow-lg p-6 mb-8'>
-          <h3 className='text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2'>
-            <FaCheckCircle className='text-gray-400' size={28} />
-            Today's Attendance
-          </h3>
-          <p className='text-gray-500 text-center py-8'>No attendance records found for today.</p>
-        </div>
-      )}
 
       {/* Courses Section */}
       <div className='bg-white rounded-2xl shadow-lg p-6 mb-8 transform transition-all duration-300 hover:shadow-2xl'>

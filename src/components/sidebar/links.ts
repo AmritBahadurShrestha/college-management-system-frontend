@@ -38,7 +38,9 @@ export const sidebarLinks: SidebarLink[] = [
   { label: 'Classes', to: '/class', roles: ['admin', 'teacher'] },  // Admin and teacher
   { label: 'Attendances', to: '/attendance', roles: ['admin', 'teacher'] }, // All can see
   { label: 'Profile', to: '/profile', roles: ['admin', 'teacher', 'student'] }, // All can see
-
+  { label: 'Results', to: '/result', roles: ['admin', 'teacher'] },
+  { label: 'Student Result', to: '/result/student', roles: ['student'] },
+  { label: 'Class Report', to: '/class-report', roles: ['admin', 'teacher'] },
 
   { label: 'Report', to: '/report', roles: [ 'teacher', 'student'] },
 ];
