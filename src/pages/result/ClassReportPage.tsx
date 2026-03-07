@@ -3,8 +3,8 @@ import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend,
 } from "recharts";
-import api from "../../api"; // used for class list fetch only
 import { getClassReport } from "../../api/result.api";
+import { getAllClassesList } from "../../api/class.api";
 
 // Types
 
@@ -114,7 +114,9 @@ export default function ClassReportPage() {
 
   // Fetch class list on mount
   useEffect(() => {
-    api.get("/class").then((res) => setClasses(res.data?.data || [])).catch(() => {});
+    getAllClassesList()
+      .then((res) => setClasses(res.data || []))
+      .catch((err) => console.error("Class fetch failed:", err));
   }, []);
 
   const fetchReport = async () => {
