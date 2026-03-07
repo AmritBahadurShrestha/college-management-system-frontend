@@ -2,8 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { postAttendance } from '../../api/attendance.api';
-import { getAllClassesList } from '../../api/class.api';
-import { getAllCoursesList } from '../../api/course.api';
+import { getAllClassesList, getClassById } from '../../api/class.api';
 import { getAllStudentFilter } from '../../api/student.api';
 import type { IAttendanceData } from '../../types/attendance.types';
 import type { IClassResponse } from '../../types/class.types';
@@ -21,19 +20,40 @@ const AutoAttendance = () => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [statusMap, setStatusMap] = useState<Record<string, AttendanceStatus>>({});
   const [loading, setLoading] = useState(false);
+  const [coursesLoading, setCoursesLoading] = useState(false);
 
-  // Fetch Classes & Courses
+  // Fetch Classes only
   useEffect(() => {
     getAllClassesList()
       .then(res => setClasses(res.data || res))
       .catch(() => toast.error('Failed to fetch classes'));
-
-    getAllCoursesList()
-      .then(res => setCourses(res.data || res))
-      .catch(() => toast.error('Failed to fetch courses'));
   }, []);
 
-  // Fetch Students
+  // Fetch courses based on selected class
+  useEffect(() => {
+    if (!classId) {
+      setCourses([]);
+      setCourseId('');
+      setStudents([]);
+      setStatusMap({});
+      return;
+    }
+
+    setCoursesLoading(true);
+    getClassById(classId)
+      .then(res => {
+        const classData = res.data || res;
+        const classCourses: ICourseResponse[] = classData.courses || [];
+        setCourses(classCourses);
+        setCourseId('');      // reset course when class changes
+        setStudents([]);      // reset students
+        setStatusMap({});
+      })
+      .catch(() => toast.error('Failed to fetch courses for this class'))
+      .finally(() => setCoursesLoading(false));
+  }, [classId]);
+
+  // Fetch Students when both classId and courseId are selected
   useEffect(() => {
     if (!classId || !courseId) {
       setStudents([]);
@@ -63,15 +83,10 @@ const AutoAttendance = () => {
       .finally(() => setLoading(false));
   }, [classId, courseId]);
 
-  // Toggle Attendance Status
   const handleToggleStatus = (studentId: string, status: AttendanceStatus) => {
-    setStatusMap(prev => ({
-      ...prev,
-      [studentId]: status,
-    }));
+    setStatusMap(prev => ({ ...prev, [studentId]: status }));
   };
 
-  // Bulk mark all
   const markAll = (status: AttendanceStatus) => {
     const newStatus: Record<string, AttendanceStatus> = {};
     students.forEach(student => {
@@ -80,7 +95,6 @@ const AutoAttendance = () => {
     setStatusMap(newStatus);
   };
 
-  // Submit Attendance Mutation
   const { mutate: submitAttendance, isPending } = useMutation({
     mutationFn: async (attendanceData: IAttendanceData[]) => {
       const results = await Promise.allSettled(attendanceData.map(data => postAttendance(data)));
@@ -88,23 +102,10 @@ const AutoAttendance = () => {
       if (failures.length > 0) throw new Error(`Failed to save ${failures.length} record(s)`);
       return results;
     },
-    onSuccess: () => {
-      toast.success('Attendance saved successfully');
-      if (classId && courseId) {
-        const filterData = { class: classId, course: courseId };
-        getAllStudentFilter(1, 100, filterData)
-          .then(res => {
-            const studentsData: IStudentResponse[] = res?.data?.data || res?.data || [];
-            setStudents(studentsData);
-            toast.success('Attendance verified');
-          })
-          .catch(() => toast.error('Failed to verify attendance'));
-      }
-    },
+    onSuccess: () => toast.success('Attendance saved successfully'),
     onError: (error: any) => toast.error(error?.message || 'Failed to save attendance'),
   });
 
-  // Form Submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!classId || !courseId) return toast.error('Please select class and course');
@@ -126,8 +127,8 @@ const AutoAttendance = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Attendance</h1>
 
       <form onSubmit={handleSubmit}>
-        {/* Filters */}
         <div className="flex flex-wrap gap-4 mb-4">
+          {/* Class Dropdown */}
           <select
             value={classId}
             onChange={e => setClassId(e.target.value)}
@@ -140,13 +141,17 @@ const AutoAttendance = () => {
             ))}
           </select>
 
+          {/* Course Dropdown — only shows after class is selected */}
           <select
             value={courseId}
             onChange={e => setCourseId(e.target.value)}
-            className="w-full sm:w-auto border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            className="w-full sm:w-auto border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:opacity-50"
             required
+            disabled={!classId || coursesLoading} // disabled until class selected
           >
-            <option value="">Select Course</option>
+            <option value="">
+              {coursesLoading ? 'Loading courses...' : !classId ? 'Select Class First' : 'Select Course'}
+            </option>
             {courses.map(course => (
               <option key={course._id} value={course._id}>{course.name}</option>
             ))}
@@ -202,7 +207,6 @@ const AutoAttendance = () => {
                 key={student._id}
                 className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col items-center gap-4"
               >
-                {/* Student Photo */}
                 <div className="w-20 h-20 rounded-full overflow-hidden border border-gray-200">
                   <img
                     src={student.profile?.path || '/default-avatar.png'}
@@ -210,11 +214,7 @@ const AutoAttendance = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-
-                {/* Student Name */}
                 <div className="text-gray-800 font-semibold text-lg text-center">{student.fullName}</div>
-
-                {/* Attendance Buttons */}
                 <div className="flex gap-4">
                   <button
                     type="button"
