@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { IStudentData } from "../types/student.types";
 import api from "./";
 
@@ -155,4 +156,12 @@ export const getAllStudentFilter = async (
   } catch (error: any) {
     throw error.response.data;
   }
+};
+
+export const updateStudentProfile = async (email: string, formData: FormData) => {
+  const encodedEmail = encodeURIComponent(email); // "amrit+0868@gmail.com" → "amrit%2B0868%40gmail.com"
+  const res = await axios.put(`/api/student/self/${encodedEmail}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data;
 };

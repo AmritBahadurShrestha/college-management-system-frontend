@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from "./";
 
 // Create teacher (FormData for profile upload)
@@ -97,4 +98,12 @@ export const deleteTeacher = async (id: string) => {
   } catch (error: any) {
     throw error.response.data;
   }
+};
+
+export const updateTeacherProfile = async (email: string, formData: FormData) => {
+  const encodedEmail = encodeURIComponent(email);
+  const res = await axios.put(`/api/teacher/self/${encodedEmail}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return res.data;
 };
